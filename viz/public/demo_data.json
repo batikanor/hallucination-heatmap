@@ -1,0 +1,165 @@
+{
+  "status": "success",
+  "samples": [
+    {
+      "input": "What is the 2022 GDP of United States?",
+      "target": "25462700000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.001,
+          "explanation": "Predicted: 25,400,000,000,000, Actual: 25,462,700,000,000, Error: 0.2%"
+        }
+      },
+      "metadata": {
+        "country": "United States",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 25462700000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of China?",
+      "target": "17963200000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.02,
+          "explanation": "Predicted: 18,300,000,000,000, Actual: 17,963,200,000,000, Error: 1.8%"
+        }
+      },
+      "metadata": {
+        "country": "China",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 17963200000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Tuvalu?",
+      "target": "60349391",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.85,
+          "explanation": "Predicted: 110,000,000, Actual: 60,349,391, Error: 82.0%"
+        }
+      },
+      "metadata": {
+        "country": "Tuvalu",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 60349391
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Germany?",
+      "target": "4072190000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.015,
+          "explanation": "Predicted: 4,100,000,000,000, Actual: 4,072,190,000,000, Error: 1.5%"
+        }
+      },
+      "metadata": {
+        "country": "Germany",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 4072190000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Nauru?",
+      "target": "150922240",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.45,
+          "explanation": "Predicted: 220,000,000, Actual: 150,922,240, Error: 45.0%"
+        }
+      },
+      "metadata": {
+        "country": "Nauru",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 150922240
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of India?",
+      "target": "3385090000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.04,
+          "explanation": "Predicted: 3,500,000,000,000, Actual: 3,385,090,000,000, Error: 3.4%"
+        }
+      },
+      "metadata": {
+        "country": "India",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 3385090000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of France?",
+      "target": "2782905000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.012,
+          "explanation": "Predicted: 2,750,000,000,000, Actual: 2,782,905,000,000, Error: 1.2%"
+        }
+      },
+      "metadata": {
+        "country": "France",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 2782905000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Kenya?",
+      "target": "113420000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.12,
+          "explanation": "Predicted: 100,000,000,000, Actual: 113,420,000,000, Error: 12.0%"
+        }
+      },
+      "metadata": {
+        "country": "Kenya",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 113420000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Nigeria?",
+      "target": "477386000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.15,
+          "explanation": "Predicted: 550,000,000,000, Actual: 477,386,000,000, Error: 15.0%"
+        }
+      },
+      "metadata": {
+        "country": "Nigeria",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 477386000000
+      }
+    },
+    {
+      "input": "What is the 2022 GDP of Brazil?",
+      "target": "1920096000000",
+      "scores": {
+        "mpe_scorer": {
+          "value": 0.08,
+          "explanation": "Predicted: 1,750,000,000,000, Actual: 1,920,096,000,000, Error: 8.9%"
+        }
+      },
+      "metadata": {
+        "country": "Brazil",
+        "year": 2022,
+        "metric": "gdp_usd",
+        "actual_value": 1920096000000
+      }
+    }
+  ]
+}
