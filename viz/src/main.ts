@@ -23,111 +23,204 @@ interface InspectSample {
 interface InspectLog {
   samples: InspectSample[];
   status?: string;
+  meta?: {
+    topic?: string;
+    description?: string;
+    metric?: string;
+  };
 }
-
-// --- Configuration ---
-const COLORS = {
-  ACCURATE: "#4ade80", // Green
-  MODERATE: "#facc15", // Yellow
-  HALLUCINATION: "#ef4444", // Red
-};
 
 // --- Initialization ---
-const container = document.getElementById("app");
-if (!container) throw new Error("Root element #app not found");
+const containerLeft = document.getElementById("app-left");
+const containerRight = document.getElementById("app-right");
+if (!containerLeft || !containerRight)
+  throw new Error("Globe containers not found");
 
-// Configure the Globe via constructor (init is private)
-// We rely on Gralobe to handle the rendering of the statistic
-const globe = new GlobeViz(container, {
-  texture: "dark", // Matches our theme
-  // labels: "data", // Default is now "data", so we can omit or be explicit
+// Configure Globes
+// Force cast to any to avoid strict TexturePreset enum issues during quick hackathon iterations
+const globeOptions: any = {
+  texture: "dark",
+  labels: "all", // SHOW ALL LABELS BY DEFAULT as requested
   effects: {
     atmosphere: true,
-    atmosphereIntensity: 0.35, // Slightly increased for better "quality" feel
-    glowPulse: true, // Subtle pulse for AI/Tech feel
-    gridLines: false,
+    atmosphereIntensity: 0.25,
+    glowPulse: true,
+    gridLines: false, // Default off for cleaner look
   },
+};
+
+// ... existing code ...
+
+// --- Methodology Modal Logic ---
+const btnMethodology = document.getElementById("btn-methodology");
+const methodologyOverlay = document.getElementById("methodology-overlay");
+const closeMethodology = document.getElementById("close-methodology");
+
+if (btnMethodology && methodologyOverlay && closeMethodology) {
+  btnMethodology.addEventListener("click", () => {
+    methodologyOverlay.classList.add("visible");
+  });
+  closeMethodology.addEventListener("click", () => {
+    methodologyOverlay.classList.remove("visible");
+  });
+  methodologyOverlay.addEventListener("click", (e) => {
+    if (e.target === methodologyOverlay)
+      methodologyOverlay.classList.remove("visible");
+  });
+}
+
+const globeLeft = new GlobeViz(containerLeft, globeOptions);
+const globeRight = new GlobeViz(containerRight, globeOptions);
+
+// IMMEDIATELY set placeholder statistics to override gralobe's default
+// This prevents gralobe's "Life Expectancy" from showing before demo loads
+globeLeft.setStatistic({
+  definition: {
+    id: "init_context",
+    name: "GDP (USD Billions)", // Clear name for demo
+    unit: "USD B",
+    description: "Actual GDP values",
+    colorScale: ["#1c1917", "#5eead4", "#2dd4bf"],
+    domain: [0, 5000],
+    format: (v: number) => `$${v}B`,
+  },
+  values: {},
+});
+globeRight.setStatistic({
+  definition: {
+    id: "init_risk",
+    name: "AI Error Rate", // Clear name
+    unit: "%",
+    description: "How wrong the AI was",
+    colorScale: ["#86efac", "#fbbf24", "#f43f5e"],
+    domain: [0, 1],
+    format: (v: number) => `${(v * 100).toFixed(0)}%`,
+  },
+  values: {},
 });
 
-function updateStats(count: number, avgError: number) {
-  const ui = document.getElementById("stats");
-  if (!ui) return;
-  const color =
-    avgError < 0.05
-      ? COLORS.ACCURATE
-      : avgError < 0.2
-      ? COLORS.MODERATE
-      : COLORS.HALLUCINATION;
-  ui.innerHTML = `
-        <div class="stat-row">
-            <span class="stat-label">Datapoints</span> 
-            <span class="stat-value font-mono">${count}</span>
-        </div>
-        <div class="stat-row">
-            <span class="stat-label">Global Error</span> 
-            <span class="stat-value font-mono" style="color: ${color}">
-                ${(avgError * 100).toFixed(1)}%
-            </span>
-        </div>
-    `;
-}
+// Simplified updateStats that takes no args
+// function updateStats removed
 
 // --- Processing Logic ---
 
+// --- Global State ---
+let currentJson: InspectLog | null = null;
+let currentMode: "mpe" | "grader" = "mpe";
+
+// --- Toggle Logic ---
+const btnMpe = document.getElementById("btn-mode-mpe");
+const btnGrader = document.getElementById("btn-mode-grader");
+
+if (btnMpe && btnGrader) {
+  btnMpe.addEventListener("click", () => setMode("mpe"));
+  btnGrader.addEventListener("click", () => setMode("grader"));
+}
+
+function setMode(mode: "mpe" | "grader") {
+  currentMode = mode;
+  // Update UI
+  if (mode === "mpe") {
+    btnMpe?.classList.add("active");
+    btnGrader?.classList.remove("active");
+  } else {
+    btnMpe?.classList.remove("active");
+    btnGrader?.classList.add("active");
+  }
+  // Re-process data if exists
+  if (currentJson) processJson(currentJson);
+}
+
 function processJson(json: InspectLog) {
+  currentJson = json; // Store for toggling
   if (!json.samples || !Array.isArray(json.samples)) {
     throw new Error("Invalid format: 'samples' array missing.");
   }
 
-  // Map samples to ID -> Value
-  const values: Record<string, number> = {};
-  let totalError = 0;
-  let count = 0;
+  // Right Globe: Score
+  const errorValues: Record<string, number> = {};
+  // Left Globe: Context
+  const contextValues: Record<string, number> = {};
+
+  const topic = json.meta?.topic || "Data Analysis";
+  const metricName = json.meta?.metric || "Value";
 
   json.samples.forEach((sample) => {
     const country = sample.metadata.country;
+    let score = 0;
 
-    let errorRate = 0;
-    const scores = sample.scores ? Object.values(sample.scores) : [];
-    if (scores.length > 0 && typeof scores[0].value === "number") {
-      errorRate = scores[0].value;
+    if (currentMode === "mpe") {
+      // Standard MPE from scorer
+      const scores = sample.scores ? Object.values(sample.scores) : [];
+      if (scores.length > 0 && typeof scores[0].value === "number") {
+        score = scores[0].value;
+      }
+    } else {
+      // AI Grader Mode (Simulated for demo, or read from model_grader)
+      // If model_grader exists, use it. Else invert MPE as a proxy for "Accuracy Score"
+      if (sample.scores?.model_grader) {
+        score = 1 - sample.scores.model_grader.value; // Visualization expects "Risk/Error" (0=Good), Grader usually gives Quality (1=Good)
+        // So: Quality 0.95 -> Risk 0.05
+      } else {
+        // Fallback if no grader data: just use MPE
+        const mpe = sample.scores?.mpe_scorer?.value || 0;
+        score = mpe;
+      }
     }
 
-    values[country] = errorRate; // 0.0 to 1.0+
-    totalError += errorRate;
-    count++;
+    errorValues[country] = score;
+
+    // Context (Left Globe) - Same as before
+    let actualVal = 0;
+    if (typeof sample.metadata.actual_value === "number") {
+      const raw = sample.metadata.actual_value;
+      if (raw > 1e12) actualVal = raw / 1e12;
+      else if (raw > 1e9) actualVal = raw / 1e9;
+      else actualVal = raw;
+    } else {
+      actualVal = 1;
+    }
+    contextValues[country] = actualVal;
   });
 
-  // Calculate stats
-  const avgError = count > 0 ? totalError / count : 0;
-  updateStats(count, avgError);
-
-  // Construct StatisticData
-  const statistic = {
+  // --- Right Globe Config ---
+  const isGrader = currentMode === "grader";
+  globeRight.setStatistic({
     definition: {
-      id: "hallucination_index",
-      name: "Hallucination Index",
+      id: isGrader ? "grader_risk" : "mpe_error",
+      name: isGrader ? "AI Grade (Inverted)" : "Visual Error Rate",
       unit: "%",
-      description: "Relative error in statistical recall",
-      colorScale: [COLORS.ACCURATE, COLORS.MODERATE, COLORS.HALLUCINATION] as [
-        string,
-        string,
-        string
-      ],
-      domain: [0, 0.5] as [number, number],
+      description: isGrader ? "100% - Quality Score" : "Mean Percentage Error",
+      colorScale: isGrader
+        ? ["#86efac", "#60a5fa", "#a855f7"] // Grader: Green -> Blue -> Purple (Nuance)
+        : ["#86efac", "#fbbf24", "#f43f5e"], // MPE: Green -> Amber -> Red (Error)
+      domain: [0, 0.5],
       format: (v: number) => `${(v * 100).toFixed(0)}%`,
     },
-    values: values,
-  };
+    values: errorValues,
+  });
 
-  // Update Globe
-  globe.setStatistic(statistic);
+  // --- Left Globe Config ---
+  globeLeft.setStatistic({
+    definition: {
+      id: "context_index",
+      name: topic,
+      unit: metricName,
+      description: `Reference Data`,
+      colorScale: ["#1c1917", "#5eead4", "#2dd4bf"],
+      domain: [0, 30],
+      format: (v: number) => `$${v.toFixed(1)}T`,
+    },
+    values: contextValues,
+  });
 }
+
+// ... existing code ...
 
 // --- Demo & Simulation Logic ---
 async function loadDemoData() {
   try {
-    const title = document.querySelector("#ui h1");
+    const title = document.querySelector("#header-text p"); // Subtitle
     if (title) title.textContent = "Loading Demo...";
 
     const res = await fetch("/demo_data.json");
@@ -143,8 +236,21 @@ async function loadDemoData() {
   }
 }
 
+// --- AUTO-LOAD DEMO ON STARTUP ---
+fetch("/demo_data.json")
+  .then((res) => {
+    if (!res.ok) throw new Error("Could not load demo data");
+    return res.json();
+  })
+  .then((json: InspectLog) => {
+    // Auto-display on initial load
+    processJson(json);
+    console.log("Demo data auto-loaded on startup");
+  })
+  .catch((err) => console.error("Failed to auto-load demo data", err));
+
 function runSimulation() {
-  const title = document.querySelector("#ui h1");
+  const title = document.querySelector("#header-text p");
   if (title) title.textContent = "Simulating Eval...";
 
   // Generate random hallucinations for visible countries
@@ -201,13 +307,13 @@ function runSimulation() {
       input: `Simulated Input for ${country}`,
       target: "0",
       scores: {
-        sim: { value: errorRate, explanation: "Simulated" },
+        metric: { value: errorRate, explanation: "Simulated" },
       },
       metadata: {
         country: country,
         year: 2022,
         metric: "sim_metric",
-        actual_value: 0,
+        actual_value: Math.floor(Math.random() * 1000), // Simulate context value
       },
     };
   });
@@ -235,8 +341,15 @@ fetch("/demo_data.json")
 
     // Demo 1: GDP
     document.getElementById("btn-demo-gdp")?.addEventListener("click", () => {
-      processJson({ samples: demoData });
-      const title = document.querySelector("#ui h1");
+      processJson({
+        samples: demoData,
+        meta: {
+          topic: "Global GDP",
+          description: "Standard Economic Data",
+          metric: "USD (Billions)",
+        },
+      });
+      const title = document.getElementById("app-title");
       if (title)
         title.innerHTML = `Visualizing: <span style="color: #646cff">GPT-5.2 Knowledge on GDP</span> (Synthetic Demo)`;
     });
@@ -261,11 +374,22 @@ fetch("/demo_data.json")
                 ),
               },
             },
+            metadata: {
+              ...d.metadata,
+              actual_value: Math.floor(Math.random() * 1000000), // Fake population
+            },
           };
         });
 
-        processJson({ samples: popData });
-        const title = document.querySelector("#ui h1");
+        processJson({
+          samples: popData,
+          meta: {
+            topic: "Global Population",
+            description: "Synthetic Bias Test",
+            metric: "People",
+          },
+        });
+        const title = document.getElementById("app-title");
         if (title)
           title.innerHTML = `Visualizing: <span style="color: #646cff">GPT-5.2 Knowledge on Population</span> (Synthetic Demo)`;
       } catch (err) {
@@ -331,28 +455,31 @@ const pasteArea = document.getElementById(
 const btnProcessPaste = document.getElementById("btn-process-paste");
 
 btnCopyPrompt?.addEventListener("click", async () => {
-  const topic = topicInput.value.trim() || "GDP 2022";
-  // HARDENED PROMPT: Explicitly forbids markdown and conversational filler
+  const topic = topicInput.value.trim() || "Global GDP 2024";
+
+  // HARDENED PROMPT: Requests Metadata for UI Context
   const prompt = `
-SYSTEM INSTRUCTION: You are a strict JSON Generator.
+SYSTEM INSTRUCTION: You are a strict JSON Data Generator.
 Topic: "${topic}"
 
 TASK:
 Generate a JSON object containing statistical accuracy tests for the above topic.
 1. Output MUST be valid, parseable JSON.
-2. Do NOT wrap output in markdown code blocks (e.g. no \`\`\`json ... \`\`\`).
-3. Do NOT include any conversational text before or after the JSON.
-4. The structure must EXACTLY match this schema:
+2. Do NOT wrap output in markdown code blocks.
+3. Structure MUST match:
 
 {
+  "meta": {
+    "topic": "Short Title (e.g. 'Pet Ownership Rates')",
+    "description": "Brief explanation of what '1.0' error means in this context",
+    "metric": "Unit (e.g. % of households)"
+  },
   "samples": [
     {
-      "input": "Question string...",
-      "target": "Expected Answer",
+      "input": "Question...",
+      "target": "Real Answer",
       "scores": {
-        "metric": {
-          "value": 0.5  // Number between 0.0 (Perfect) and 1.0 (Total Hallucination)
-        }
+        "metric": { "value": 0.5 } // 0.0=Accurate, 1.0=Hallucination
       },
       "metadata": {
         "country": "Country Name",
@@ -363,10 +490,10 @@ Generate a JSON object containing statistical accuracy tests for the above topic
 }
 
 REQUIREMENTS:
-- Generate at least 20 diverse countries.
-- "value" 0.0 represents accurate data (Green).
-- "value" 1.0 represents specific hallucination (Red).
-- Ensure "country" names are standard English (e.g., "France", "United States").
+- Generate 20+ diverse countries.
+- "value" 0.0 = Accurate.
+- "value" 1.0 = Massive Hallucination / Fabrication.
+- Use standard English country names.
 
 BEGIN JSON OUTPUT:
 `.trim();
@@ -379,6 +506,21 @@ BEGIN JSON OUTPUT:
   } catch (err) {
     alert("Failed to copy. Please manually copy the prompt logic.");
   }
+});
+
+// --- Header Toggle Logic ---
+const header = document.getElementById("hud-header");
+const toggleArea = document.getElementById("header-toggle-area");
+const minBtn = document.getElementById("btn-minimize-header");
+
+function toggleHeader() {
+  header?.classList.toggle("minimized");
+}
+
+toggleArea?.addEventListener("click", toggleHeader);
+minBtn?.addEventListener("click", (e) => {
+  e.stopPropagation(); // Prevent double trigger
+  toggleHeader();
 });
 
 btnProcessPaste?.addEventListener("click", () => {
@@ -394,7 +536,7 @@ btnProcessPaste?.addEventListener("click", () => {
 
     const json = JSON.parse(text) as InspectLog;
 
-    // Normalize structure if simplified JSON is pasted
+    // Support legacy/array format dynamically
     if (!json.samples && Array.isArray(json)) {
       processJson({ samples: json });
     } else {
@@ -402,29 +544,33 @@ btnProcessPaste?.addEventListener("click", () => {
     }
 
     researchOverlay?.classList.remove("visible");
-    // 5. Update UI
-    const title = document.querySelector("#ui h1");
-    if (title) {
-      // Try to infer topic from first input or generic
-      let topic = "Custom Knowledge";
-      // Assuming `log` and `data` are accessible or can be derived from `json`
-      // For this context, `json` is the parsed InspectLog.
-      // `data` would typically be the processed data points for the globe,
-      // which `processJson` would generate. We'll use `json.samples.length` for count.
-      if (json.samples && json.samples.length > 0) {
-        const input = json.samples[0].input;
-        // Heuristic: Extract "What is [TOPIC] of..."
-        const match = input.match(/What is (.*?) of/i);
-        if (match && match[1]) topic = match[1];
-      }
-      title.innerHTML = `Visualizing: <span style="color: #646cff">${topic}</span> (${
-        json.samples?.length || 0
-      } Countries)`;
+
+    // 5. Update UI Context (Header)
+    const title = document.getElementById("app-title");
+    const subtitle = document.getElementById("app-subtitle");
+
+    // Use metadata if available, otherwise fallback
+    const topic = json.meta?.topic || "Custom Analysis";
+    const desc =
+      json.meta?.description ||
+      `Visualizing ${json.samples?.length || 0} Data Points`;
+
+    if (title && subtitle) {
+      title.innerHTML = `Analysis: <span style="color: #22d3ee">${topic}</span>`;
+      subtitle.textContent = desc;
     }
 
-    const legendTitle = document.querySelector("#legend h3");
-    if (legendTitle)
-      legendTitle.textContent = "Hallucination Error Rate (0=Truth, 1=Lie)";
+    // 6. Update Legend Context
+    const legendTitle = document.getElementById("legend-title");
+    const legendSubtitle = document.getElementById("legend-subtitle");
+
+    if (legendTitle) {
+      legendTitle.textContent = "Hallucination Confidence";
+    }
+    if (legendSubtitle && json.meta?.metric) {
+      legendSubtitle.innerHTML = `Metric: <span style="color: #cbd5e1">${json.meta.metric}</span>`;
+      legendSubtitle.style.color = "#22d3ee";
+    }
   } catch (e) {
     console.error(e);
     alert("Invalid JSON. Please ensure the AI output is clean JSON.");
@@ -435,66 +581,65 @@ btnProcessPaste?.addEventListener("click", () => {
 // --- Configuration GUI ---
 import GUI from "lil-gui";
 
-// Wait for globe to be ready implicitly or just init GUI
-const gui = new GUI({ title: "Globe Settings" });
-gui.domElement.style.position = "absolute";
-gui.domElement.style.top = "24px";
-gui.domElement.style.right = "24px";
+const gui = new GUI({ title: "⚙️ Both Globes" }); // Clear that it affects both
+// Position: TOP-LEFT of the left globe panel area
+gui.domElement.style.position = "fixed";
+gui.domElement.style.top = "100px"; // Below header
+gui.domElement.style.left = "24px";
+gui.domElement.style.bottom = "auto";
+gui.domElement.style.right = "auto";
 
-// Configuration State
+// Helper to sync effects
+function setGlobalEffects(effects: any) {
+  globeLeft.setEffects(effects);
+  globeRight.setEffects(effects);
+}
+
 const config = {
-  atmosphere: 0.35,
+  atmosphere: 0.25,
   glow: true,
   clouds: false,
   grid: false,
   cityLights: false,
   labels: "data" as "all" | "data" | "none",
   screenshot: () => {
-    globe.screenshot({ filename: "hallucination-heatmap.png" });
+    // Screenshot right globe (Analysis) by default or maybe both?
+    // Gralobe API likely supports one.
+    globeRight.screenshot({ filename: "hallucination-analysis.png" });
   },
 };
 
-// Bind controls to Globe API
 const visuals = gui.addFolder("Visuals");
 visuals
   .add(config, "atmosphere", 0, 1.0)
   .name("Atmosphere")
-  .onChange((v: number) => {
-    globe.setEffects({ atmosphereIntensity: v });
-  });
+  .onChange((v: number) => setGlobalEffects({ atmosphereIntensity: v }));
 visuals
   .add(config, "glow")
   .name("AI Pulse")
-  .onChange((v: boolean) => {
-    globe.setEffects({ glowPulse: v });
-  });
+  .onChange((v: boolean) => setGlobalEffects({ glowPulse: v }));
 visuals
   .add(config, "clouds")
   .name("Clouds")
-  .onChange((v: boolean) => {
-    globe.setEffects({ clouds: v });
-  });
+  .onChange((v: boolean) => setGlobalEffects({ clouds: v }));
 visuals
   .add(config, "grid")
   .name("Grid Lines")
-  .onChange((v: boolean) => {
-    globe.setEffects({ gridLines: v });
-  });
+  .onChange((v: boolean) => setGlobalEffects({ gridLines: v }));
 visuals
   .add(config, "cityLights")
   .name("City Lights")
-  .onChange((v: boolean) => {
-    globe.setEffects({ cityLights: v });
-  });
+  .onChange((v: boolean) => setGlobalEffects({ cityLights: v }));
 
 gui
   .add(config, "labels", ["all", "data", "none"])
   .name("Labels")
   .onChange((v: any) => {
-    globe.setLabels(v);
+    globeLeft.setLabels(v);
+    globeRight.setLabels(v);
   });
 
-gui.add(config, "screenshot").name("📸 Screenshot");
+gui.add(config, "screenshot").name("📸 Snap Analysis");
 // --- Drag & Drop Handler ---
 function setupDragDrop() {
   const dropZone = document.body;

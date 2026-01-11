@@ -5,276 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hallucination Heatmap</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
       body {
         margin: 0;
-        overflow: hidden;
+        overflow: hidden; /* No scrolling */
         background: #000812;
         color: white;
         font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
           Roboto, sans-serif;
-      }
-      #app {
-        width: 100vw;
         height: 100vh;
-      }
-
-      /* --- 1. Global HUD Container --- */
-      #ui {
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        z-index: 50; /* Above Globe (0), Below Modals (100) */
-        padding: 24px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
       }
 
-      /* Reset pointer events for interactive children */
-      #hud-header,
-      #hud-sidebar,
-      #hud-controls {
-        pointer-events: auto;
-      }
-
-      /* --- 2. HUD Components --- */
-      .panel {
-        background: rgba(10, 10, 20, 0.75);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      /* Header (Top-Left) */
-      #hud-header {
-        position: fixed;
-        top: 32px;
-        left: 32px;
-        /* No background, just text/logo for cleanliness */
-      }
-
-      /* Sidebar (Left-Center) */
-      #hud-sidebar {
-        position: fixed;
-        top: 50%;
-        left: 32px;
-        transform: translateY(-50%);
-        width: 260px;
-        padding: 20px;
-      }
-      .panel-header {
+      /* ========================================
+         TOP ZONE: All UI Controls
+         ======================================== */
+      #top-zone {
+        flex-shrink: 0; /* Don't compress */
         display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .panel-header h3 {
-        margin: 0;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: #94a3b8;
-      }
-      .panel-header .icon {
-        font-size: 1.2rem;
-      }
-
-      .guide-step {
-        display: flex;
+        flex-direction: column;
         gap: 12px;
-        margin-bottom: 18px;
-        position: relative;
+        padding: 16px 24px;
+        background: linear-gradient(
+          180deg,
+          rgba(15, 23, 42, 0.9) 0%,
+          rgba(0, 8, 18, 0.7) 100%
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 100;
       }
-      .guide-step:last-child {
-        margin-bottom: 0;
+
+      /* Row 1: Header + Controls */
+      .top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
       }
-      .step-dot {
-        background: #334155;
-        color: #e2e8f0;
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
+
+      /* Branding */
+      .branding {
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-size: 0.75rem;
-        font-weight: 700;
-        flex-shrink: 0;
-        z-index: 1;
-        border: 2px solid #0f172a;
+        gap: 12px;
       }
-      .step-content strong {
-        display: block;
-        font-size: 0.9rem;
-        color: #f1f5f9;
-        margin-bottom: 2px;
+      .branding img {
+        height: 40px;
+        width: 40px;
+        border-radius: 10px;
       }
-      .step-content p {
+      .branding h1 {
         margin: 0;
-        font-size: 0.8rem;
-        color: #94a3b8;
-        line-height: 1.4;
-      }
-
-      /* Controls Dock (Bottom-Center) */
-      #hud-controls.dock {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-        padding: 16px 32px;
-        border-radius: 24px;
-        background: rgba(15, 23, 42, 0.9);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-      }
-
-      .control-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
-      }
-      .control-group .label {
-        font-size: 0.65rem;
-        color: #64748b;
+        font-size: 1.1rem;
         font-weight: 700;
-        letter-spacing: 0.15em;
+        line-height: 1.2;
+      }
+      .branding p {
+        margin: 0;
+        font-size: 0.75rem;
+        color: #94a3b8;
       }
 
-      /* Modern Button Styles */
-      .btn-row.compact {
+      /* Control Buttons */
+      .controls {
         display: flex;
-        gap: 10px;
+        gap: 8px;
+        align-items: center;
       }
-
-      .btn-hud {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+      .btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #e2e8f0;
+        padding: 8px 16px;
         border-radius: 8px;
-        color: #cbd5e1;
-        padding: 8px 12px;
-        min-width: 100px;
-        text-align: left;
+        font-weight: 600;
+        font-size: 0.85rem;
         cursor: pointer;
-        transition: all 0.2s;
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
         gap: 2px;
+        transition: all 0.2s;
       }
-      .btn-hud:hover {
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.1);
         border-color: rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.05);
-        transform: translateY(-2px);
       }
-      .btn-hud .sub {
+      .btn .label {
         font-size: 0.65rem;
+        color: #a8a29e; /* Stone-400 */
         text-transform: uppercase;
-        opacity: 0.6;
-        font-weight: 600;
       }
-      .btn-hud span:not(.sub) {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: white;
+      .btn.primary {
+        background: rgba(245, 158, 11, 0.15); /* Amber */
+        border-color: #f59e0b;
+        color: #fcd34d;
       }
-
-      /* Variant: Primary (Blue/Purple Gradient Border) */
-      .btn-hud.primary {
-        border-color: #6366f1;
-        background: rgba(99, 102, 241, 0.1);
-      }
-      .btn-hud.primary:hover {
-        background: rgba(99, 102, 241, 0.2);
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      .btn.danger {
+        border-color: rgba(244, 63, 94, 0.5); /* Rose */
+        color: #fda4af;
       }
 
-      /* Variant: Action (Cyan) */
-      .btn-hud.action {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-      }
-      .btn-hud.action .icon {
-        font-size: 1.2rem;
-      }
-
-      /* Variant: Danger (Red) */
-      .btn-hud.danger {
-        border-color: rgba(239, 68, 68, 0.4);
-        color: #fca5a5;
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-      }
-      .btn-hud.danger:hover {
-        background: rgba(239, 68, 68, 0.15);
-        border-color: #ef4444;
-      }
-
-      .vertical-divider {
+      /* Divider */
+      .divider {
         width: 1px;
         height: 32px;
         background: rgba(255, 255, 255, 0.1);
+        margin: 0 8px;
       }
 
-      /* --- 3. Legend (Bottom Right) --- */
-      #legend {
-        position: fixed;
-        bottom: 32px;
-        right: 32px;
-        background: rgba(10, 10, 20, 0.85);
-        backdrop-filter: blur(12px);
-        padding: 16px;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        z-index: 40;
-        width: 220px;
-      }
-      #legend h3 {
-        margin: 0 0 8px 0;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #94a3b8;
-      }
-      .gradient-bar {
-        height: 6px;
-        background: linear-gradient(to right, #4ade80, #facc15, #ef4444);
-        border-radius: 3px;
-        margin-bottom: 8px;
-      }
-      .labels {
+      /* Legend removed - gralobe's built-in legend is sufficient */
+
+      /* Row 2: Workflow Hints (Optional, inline) */
+      .workflow-hints {
         display: flex;
-        justify-content: space-between;
+        gap: 24px;
+        align-items: center;
+        padding: 8px 0;
+        font-size: 0.8rem;
+        color: #64748b;
       }
-      .labels span {
-        font-size: 0.75rem;
-        color: #cbd5e1;
-        text-align: center;
-        line-height: 1.2;
+      .workflow-hints span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
-      .labels small {
-        font-size: 0.65rem;
-        opacity: 0.6;
-        display: block;
+      .workflow-hints .step-num {
+        background: #334155;
+        color: #e2e8f0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
       }
 
-      /* --- 4. Modals (High Z-Index) --- */
+      /* ========================================
+         BOTTOM ZONE: Visualization
+         ======================================== */
+      #bottom-zone {
+        flex: 1; /* Take all remaining space */
+        display: flex;
+        background: #000812;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .globe-panel {
+        flex: 1;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      .globe-panel:first-child {
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .globe-canvas {
+        width: 100%;
+        height: 100%;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .globe-label {
+        position: absolute;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.9);
+        padding: 6px 14px;
+        border-radius: 16px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #cbd5e1;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        pointer-events: none;
+        z-index: 10;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .dot.context {
+        background: #5eead4; /* Teal-300 */
+        box-shadow: 0 0 8px rgba(94, 234, 212, 0.5);
+      }
+      .dot.risk {
+        background: #fb7185; /* Rose-400 */
+        box-shadow: 0 0 8px rgba(251, 113, 133, 0.5);
+      }
+
+      /* ========================================
+         MODALS (Keep as overlay - OK to cover globes)
+         ======================================== */
       .modal-overlay {
         position: fixed;
         inset: 0;
-        z-index: 1000; /* Highest */
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(8px);
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(12px);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -288,322 +234,282 @@
       }
 
       .modal {
-        background: #0f172a;
-        border: 1px solid #334155;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 20px;
-        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7);
-        position: relative;
         color: white;
-        animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        width: 560px;
+        max-width: 95vw;
+        position: relative;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
       }
-      @keyframes modalPop {
-        from {
-          transform: scale(0.95);
-          opacity: 0;
-        }
-        to {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
-
-      .compact-modal {
-        padding: 32px;
-        width: 320px;
-        text-align: center;
-      }
-      .large-modal {
-        width: 600px;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      /* Modal Internals */
       .modal-header {
         padding: 24px;
-        background: rgba(255, 255, 255, 0.03);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
       .modal-header h2 {
         margin: 0;
-        font-size: 1.4rem;
-        font-weight: 600;
+        font-size: 1.3rem;
       }
       .modal-header p {
         margin: 8px 0 0 0;
         color: #94a3b8;
         font-size: 0.9rem;
       }
-
       .close-btn {
         position: absolute;
-        top: 20px;
-        right: 20px;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #64748b;
+        top: 16px;
+        right: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        color: #94a3b8;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .close-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
         color: white;
       }
 
-      .step-container {
+      .modal-body {
         padding: 24px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 24px;
       }
-
-      .step-box {
+      .step-row {
         display: flex;
         gap: 16px;
       }
       .step-badge {
         width: 28px;
         height: 28px;
-        background: #22d3ee;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #22d3ee, #0ea5e9);
         color: #083344;
-        font-weight: bold;
-        border-radius: 50%;
+        font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.85rem;
         flex-shrink: 0;
-        margin-top: 4px;
       }
-      .step-body {
+      .step-content {
         flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
-      .step-body label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 600;
+      .step-content label {
+        font-size: 0.7rem;
+        font-weight: 700;
         text-transform: uppercase;
         color: #64748b;
-        margin-bottom: 8px;
       }
 
-      .input-group {
-        display: flex;
-        gap: 10px;
-      }
       input,
       textarea {
-        background: #1e293b;
-        border: 1px solid #334155;
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         color: white;
         border-radius: 8px;
-        padding: 10px;
-        font-family: inherit;
-        font-size: 0.9rem;
+        padding: 12px;
+        font-size: 0.95rem;
         width: 100%;
-        transition: border-color 0.2s;
       }
       input:focus,
       textarea:focus {
-        border-color: #22d3ee;
+        border-color: #38bdf8;
         outline: none;
       }
-      .input-group input {
-        flex: 1;
-      }
 
-      .btn-solid {
-        padding: 10px 16px;
-        border-radius: 8px;
-        font-weight: 600;
+      .input-row {
+        display: flex;
+        gap: 8px;
+      }
+      .action-btn {
+        background: #38bdf8;
+        color: #082f49;
         border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s;
-        font-size: 0.9rem;
+        white-space: nowrap;
       }
-      .btn-solid.highlight {
-        background: #22d3ee;
-        color: #083344;
-      }
-      .btn-solid.highlight:hover {
-        background: #67e8f9;
-      }
-
-      .btn-solid.confirm {
+      .confirm-btn {
+        width: 100%;
         background: #4ade80;
-        color: #022c22;
+        color: #052e16;
+        border: none;
+        border-radius: 8px;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
       }
-      .btn-solid.confirm:hover {
-        background: #86efac;
-      }
-
-      .btn-solid.danger {
-        background: #ef4444;
-        color: white;
-      }
-      .btn-solid.danger:hover {
-        background: #f87171;
-      }
-
-      .btn-text {
-        background: transparent;
-        color: #94a3b8;
-      }
-      .btn-text:hover {
-        color: white;
-      }
-
       .links {
-        margin-top: 8px;
         font-size: 0.8rem;
         color: #64748b;
         display: flex;
         gap: 12px;
-        align-items: center;
       }
       .links a {
-        color: #22d3ee;
+        color: #38bdf8;
         text-decoration: none;
       }
-      .links a:hover {
-        text-decoration: underline;
-      }
 
-      .action-row {
-        display: flex;
-        gap: 12px;
-        margin-top: 24px;
-      }
-      .action-row.centered {
+      /* Drop Overlay */
+      #drop-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.95);
+        z-index: 2000;
+        display: none;
+        align-items: center;
         justify-content: center;
       }
-      .full-width {
-        width: 100%;
-        margin-top: 10px;
+      #drop-overlay.visible {
+        display: flex;
       }
-
-      .modal-icon.warning {
-        font-size: 3rem;
-        margin-bottom: 16px;
-        display: block;
+      #drop-overlay::after {
+        content: "Drop JSON File";
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border: 3px dashed rgba(255, 255, 255, 0.3);
+        padding: 40px 60px;
+        border-radius: 16px;
+      }
+      .toggle-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        padding: 6px 16px;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .toggle-btn.active {
+        background: #38bdf8;
+        color: #082f49;
+        box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+      }
+      .toggle-btn:hover:not(.active) {
+        color: white;
       }
     </style>
   </head>
   <body>
+    <!-- Drop Overlay -->
     <div id="drop-overlay"></div>
-    <!-- UI Overlay (HUD Layout) -->
-    <div id="ui">
-      <!-- 1. Header (Fixed Top-Left) -->
-      <div id="hud-header">
-        <div style="display: flex; align-items: center; gap: 1rem">
-          <img
-            src="/logo.png"
-            style="height: 40px; width: 40px; border-radius: 8px"
-            alt="Logo"
-          />
+
+    <!-- ============ TOP ZONE: All UI ============ -->
+    <div id="top-zone">
+      <div class="top-row">
+        <!-- Branding -->
+        <div class="branding">
+          <img src="/logo.png" alt="Logo" />
           <div>
-            <h1
-              style="
-                margin: 0;
-                font-size: 1.2rem;
-                letter-spacing: -0.01em;
-                line-height: 1.2;
-              "
-            >
-              Hallucination Heatmap
-            </h1>
-            <p style="margin: 0; font-size: 0.8rem; opacity: 0.6">
-              Visualizing AI Knowledge Boundaries
-            </p>
+            <h1 id="app-title">Hallucination Heatmap</h1>
+            <p id="app-subtitle">Visualizing AI Knowledge Boundaries</p>
           </div>
         </div>
-      </div>
 
-      <!-- 2. Guide Sidebar (Fixed Left-Center) -->
-      <div id="hud-sidebar" class="panel">
-        <h3
+        <!-- Controls -->
+        <div class="controls">
+          <button id="btn-demo-gdp" class="btn">
+            <span class="label">Demo</span>
+            GDP
+          </button>
+          <button id="btn-methodology" class="btn" style="border-style: dashed">
+            <span class="label">Info</span>
+            Methodology
+          </button>
+          <div class="divider"></div>
+          <button id="btn-research" class="btn primary">BYO Research</button>
+          <button id="btn-reset" class="btn danger">Reset</button>
+        </div>
+
+        <!-- Toggle Switch -->
+        <div
+          class="toggle-container"
           style="
-            margin-top: 0;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0.5;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 20px;
+            display: flex;
+            gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
           "
         >
-          Workflow
-        </h3>
-
-        <div class="guide-step">
-          <div class="step-dot">1</div>
-          <div class="step-content">
-            <strong>Load Data</strong>
-            <p>Choose a demo or drag-and-drop JSON.</p>
-          </div>
+          <button id="btn-mode-mpe" class="toggle-btn active">
+            MPE (Math)
+          </button>
+          <button id="btn-mode-grader" class="toggle-btn">AI Grader</button>
         </div>
-
-        <div class="guide-step">
-          <div class="step-dot">2</div>
-          <div class="step-content">
-            <strong>Analyze</strong>
-            <p>Red zones = High hallucination confidence.</p>
-          </div>
-        </div>
-
-        <div class="guide-step">
-          <div class="step-dot">3</div>
-          <div class="step-content">
-            <strong>Custom</strong>
-            <p>Use "BYO Research" to test specific topics.</p>
-          </div>
-        </div>
+        <!-- Legend moved to fixed position at bottom-left -->
       </div>
 
-      <!-- 3. Main Controls (Fixed Bottom-Center) -->
-      <div id="hud-controls" class="panel">
-        <div class="control-group">
-          <span class="label">Demo Data</span>
-          <div class="btn-row compact">
-            <button id="btn-demo-gdp" class="btn-hud">
-              GPT-5.2 <br /><strong>GDP</strong>
-            </button>
-            <button id="btn-demo-pop" class="btn-hud">
-              GPT-5.2 <br /><strong>Population</strong>
-            </button>
-          </div>
+      <!-- Workflow Hints -->
+      <div class="workflow-hints">
+        <span><span class="step-num">1</span> Load demo or BYO data</span>
+        <span
+          ><span class="step-num">2</span> Compare: Left = Context, Right = AI
+          Error</span
+        >
+        <span
+          ><span class="step-num">3</span> Red zones = High hallucination
+          confidence</span
+        >
+      </div>
+    </div>
+
+    <!-- ============ BOTTOM ZONE: Globes ============ -->
+    <div id="bottom-zone">
+      <div class="globe-panel">
+        <div id="app-left" class="globe-canvas"></div>
+        <div class="globe-label">
+          <span class="dot context"></span> Context Analysis
         </div>
-
-        <div class="vertical-divider"></div>
-
-        <div class="control-group">
-          <span class="label">Research</span>
-          <div class="btn-row compact">
-            <button id="btn-research" class="btn-hud">
-              BYO <br />Research
-            </button>
-            <button id="btn-reset" class="btn-hud danger">
-              Reset <br />App
-            </button>
-          </div>
+      </div>
+      <div class="globe-panel">
+        <div id="app-right" class="globe-canvas"></div>
+        <div class="globe-label">
+          <span class="dot risk"></span> Hallucination Risk
         </div>
       </div>
     </div>
 
-    <!-- Confirm Reset Modal (Restored) -->
+    <!-- ============ MODALS ============ -->
+    <!-- Reset Modal -->
     <div id="confirm-reset-overlay" class="modal-overlay">
-      <div class="modal" style="max-width: 400px; text-align: center">
-        <h2 style="color: #ef4444; margin-top: 0">⚠️ Reset Application?</h2>
-        <p>
-          This will <strong>clear all loaded data</strong>, remove the globe
-          visualization, and return the app to its initial empty state.
+      <div
+        class="modal"
+        style="width: 360px; text-align: center; padding: 32px"
+      >
+        <h2 style="color: #ef4444; margin: 0 0 16px 0">⚠️ Reset?</h2>
+        <p style="color: #94a3b8; margin: 0 0 24px 0">
+          Clear all data and return to initial state.
         </p>
-        <p>Are you sure you want to proceed?</p>
-
-        <div
-          class="action-row"
-          style="justify-content: center; margin-top: 2rem"
-        >
+        <div style="display: flex; gap: 12px; justify-content: center">
           <button
             id="btn-cancel-reset"
-            style="background: rgba(255, 255, 255, 0.1); padding: 10px 20px"
+            style="
+              background: rgba(255, 255, 255, 0.1);
+              border: none;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 8px;
+              cursor: pointer;
+            "
           >
             Cancel
           </button>
@@ -611,125 +517,110 @@
             id="btn-confirm-reset"
             style="
               background: #ef4444;
-              color: white;
               border: none;
+              color: white;
               padding: 10px 20px;
+              border-radius: 8px;
+              cursor: pointer;
             "
           >
-            Yes, Reset
+            Reset
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Legend (Bottom Right) -->
-    <div id="legend">
-      <h3>Hallucination Severity Impact</h3>
-      <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.5rem">
-        Mean Percentage Error (MPE)
-      </p>
-      <div class="gradient-bar"></div>
-      <div class="labels">
-        <span>0.0 (Accurate)</span>
-        <span>0.5 (Significant Error)</span>
-        <span>1.0+ (Fabrication)</span>
-      </div>
-    </div>
-    <!-- About Overlay -->
-    <div id="about-overlay" class="modal-overlay">
-      <div class="modal">
-        <button class="close-btn" id="close-about">×</button>
-        <h2>About Hallucination Heatmap</h2>
-        <p>
-          This tool visualizes the
-          <strong>"Trustworthiness Boundary"</strong> of Large Language Models.
-        </p>
-        <p>
-          By querying an LLM for statistical data (e.g., "What is the GDP of
-          X?") and comparing it to ground truth, we generate a
-        </p>
-        <ul>
-          <li>
-            <span style="color: #4ade80">Green</span>: High Accuracy (&lt; 5%
-            Error)
-          </li>
-          <li>
-            <span style="color: #facc15">Yellow</span>: Moderate Drift (5-20%
-            Error)
-          </li>
-          <li>
-            <span style="color: #ef4444">Red</span>: Significant Hallucination
-            (&gt; 20% Error)
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Research Logic Modal -->
+    <!-- Research Modal -->
     <div id="research-overlay" class="modal-overlay">
-      <div class="modal" style="max-width: 600px">
+      <div class="modal">
         <button class="close-btn" id="close-research">×</button>
-        <h2>BYO Research Workflow</h2>
-        <p class="instruction" style="margin-bottom: 20px">
-          Analyze any topic with your own AI.
-        </p>
-
-        <!-- Step 1: Prompt Generation -->
-        <div class="step-box">
-          <label>1. Enter Topic</label>
-          <input
-            type="text"
-            id="topic-input"
-            placeholder="e.g. 'Renewable Energy Adoption Rate 2023'"
-          />
-          <div class="action-row">
-            <button
-              id="btn-copy-prompt"
-              style="
-                flex: inherit;
-                width: auto;
-                background: #22d3ee;
-                color: #002e3b;
-              "
-            >
-              Copy Prompt
-            </button>
-            <a href="https://chat.openai.com" target="_blank" class="ext-link"
-              >ChatGPT</a
-            >
-            <a href="https://claude.ai" target="_blank" class="ext-link"
-              >Claude</a
-            >
-            <a href="https://gemini.google.com" target="_blank" class="ext-link"
-              >Gemini</a
-            >
+        <div class="modal-header">
+          <h2>BYO Research</h2>
+          <p>Analyze any topic using your own AI.</p>
+        </div>
+        <div class="modal-body">
+          <div class="step-row">
+            <div class="step-badge">1</div>
+            <div class="step-content">
+              <label>Enter Topic</label>
+              <div class="input-row">
+                <input
+                  type="text"
+                  id="topic-input"
+                  placeholder="e.g. 'Renewable Energy Adoption 2023'"
+                />
+                <button id="btn-copy-prompt" class="action-btn">
+                  Copy Prompt
+                </button>
+              </div>
+              <div class="links">
+                <span
+                  >The prompt asks the AI to find
+                  <strong>Ground Truth</strong> values and compare itself.</span
+                >
+                <div style="margin-top: 8px; display: flex; gap: 8px; font-size: 0.8rem;">
+                   <a href="https://chat.openai.com" target="_blank" style="color:#38bdf8;">ChatGPT</a> • 
+                   <a href="https://claude.ai" target="_blank" style="color:#38bdf8;">Claude</a> • 
+                   <a href="https://gemini.google.com" target="_blank" style="color:#38bdf8;">Gemini</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-badge">2</div>
+            <div class="step-content">
+              <label>Paste AI Response (JSON)</label>
+              <textarea
+                id="json-paste-area"
+                rows="5"
+                placeholder="Paste JSON here... Ensure it includes 'metadata.actual_value' or 'scores.model_grader' for comparison."
+              ></textarea>
+              <button id="btn-process-paste" class="confirm-btn">
+                Visualize Data
+              </button>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- Step 2: Paste Result -->
-        <div class="step-box">
-          <label>2. Paste AI Response (JSON)</label>
-          <textarea
-            id="json-paste-area"
-            placeholder="Paste the JSON output here...
-(Note: This will overwrite any currently visible data)"
-          ></textarea>
-          <button
-            id="btn-process-paste"
-            style="
-              width: 100%;
-              margin-top: 8px;
-              background: #4ade80;
-              color: #00220e;
-            "
-          >
-            Visualize Data
-          </button>
+    <!-- About Modal (placeholder) -->
+    <div id="about-overlay" class="modal-overlay"></div>
+
+    <!-- Methodology Modal -->
+    <div id="methodology-overlay" class="modal-overlay">
+      <div class="modal" style="width: 600px">
+        <button class="close-btn" id="close-methodology">×</button>
+        <div class="modal-header">
+          <h2>Hallucination Calculation</h2>
+          <p>How we measure AI accuracy vs. fabrication.</p>
+        </div>
+        <div class="modal-body markdown-body">
+          <p>We provide two ways to measure AI performance:</p>
+          
+          <h3>1. Statistical Error (MPE)</h3>
+          <p>Strict mathematical comparison. Best for numeric data.</p>
+          <div class="math-block">
+            Error = | Predicted - Actual | / Actual
+          </div>
+          
+          <h3>2. AI Grader (LLM-as-a-Judge)</h3>
+          <p>We ask a different model (e.g. GPT-5 Nano) to grade the response quality.</p>
+          <div class="math-block">
+             Score (0-100) → Inverted Risk
+          </div>
+          <ul>
+              knowledge. <br />
+              <em
+                >e.g. AI says "Tuvalu GDP is $1B" (Actual: $0.06B) →
+                <strong>1500% Error</strong></em
+              >
+            </li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

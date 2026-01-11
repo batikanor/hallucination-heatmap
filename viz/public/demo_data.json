@@ -1,165 +1,60 @@
 {
   "status": "success",
+  "meta": {
+    "topic": "2024 Global GDP Prediction",
+    "description": "GPT-4o knowledge of detailed economic statistics across 50 nations.",
+    "metric": "GDP (USD Billions)"
+  },
   "samples": [
-    {
-      "input": "What is the 2022 GDP of United States?",
-      "target": "25462700000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.001,
-          "explanation": "Predicted: 25,400,000,000,000, Actual: 25,462,700,000,000, Error: 0.2%"
-        }
-      },
-      "metadata": {
-        "country": "United States",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 25462700000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of China?",
-      "target": "17963200000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.02,
-          "explanation": "Predicted: 18,300,000,000,000, Actual: 17,963,200,000,000, Error: 1.8%"
-        }
-      },
-      "metadata": {
-        "country": "China",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 17963200000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Tuvalu?",
-      "target": "60349391",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.85,
-          "explanation": "Predicted: 110,000,000, Actual: 60,349,391, Error: 82.0%"
-        }
-      },
-      "metadata": {
-        "country": "Tuvalu",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 60349391
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Germany?",
-      "target": "4072190000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.015,
-          "explanation": "Predicted: 4,100,000,000,000, Actual: 4,072,190,000,000, Error: 1.5%"
-        }
-      },
-      "metadata": {
-        "country": "Germany",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 4072190000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Nauru?",
-      "target": "150922240",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.45,
-          "explanation": "Predicted: 220,000,000, Actual: 150,922,240, Error: 45.0%"
-        }
-      },
-      "metadata": {
-        "country": "Nauru",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 150922240
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of India?",
-      "target": "3385090000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.04,
-          "explanation": "Predicted: 3,500,000,000,000, Actual: 3,385,090,000,000, Error: 3.4%"
-        }
-      },
-      "metadata": {
-        "country": "India",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 3385090000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of France?",
-      "target": "2782905000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.012,
-          "explanation": "Predicted: 2,750,000,000,000, Actual: 2,782,905,000,000, Error: 1.2%"
-        }
-      },
-      "metadata": {
-        "country": "France",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 2782905000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Kenya?",
-      "target": "113420000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.12,
-          "explanation": "Predicted: 100,000,000,000, Actual: 113,420,000,000, Error: 12.0%"
-        }
-      },
-      "metadata": {
-        "country": "Kenya",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 113420000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Nigeria?",
-      "target": "477386000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.15,
-          "explanation": "Predicted: 550,000,000,000, Actual: 477,386,000,000, Error: 15.0%"
-        }
-      },
-      "metadata": {
-        "country": "Nigeria",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 477386000000
-      }
-    },
-    {
-      "input": "What is the 2022 GDP of Brazil?",
-      "target": "1920096000000",
-      "scores": {
-        "mpe_scorer": {
-          "value": 0.08,
-          "explanation": "Predicted: 1,750,000,000,000, Actual: 1,920,096,000,000, Error: 8.9%"
-        }
-      },
-      "metadata": {
-        "country": "Brazil",
-        "year": 2022,
-        "metric": "gdp_usd",
-        "actual_value": 1920096000000
-      }
-    }
+    { "metadata": { "country": "United States", "actual_value": 27360000000000 }, "scores": { "mpe_scorer": { "value": 0.002 } } },
+    { "metadata": { "country": "China", "actual_value": 17790000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
+    { "metadata": { "country": "Japan", "actual_value": 4212000000000 }, "scores": { "mpe_scorer": { "value": 0.008 } } },
+    { "metadata": { "country": "Germany", "actual_value": 4456000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
+    { "metadata": { "country": "India", "actual_value": 3549000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
+    { "metadata": { "country": "United Kingdom", "actual_value": 3340000000000 }, "scores": { "mpe_scorer": { "value": 0.021 } } },
+    { "metadata": { "country": "France", "actual_value": 3030000000000 }, "scores": { "mpe_scorer": { "value": 0.019 } } },
+    { "metadata": { "country": "Brazil", "actual_value": 2173000000000 }, "scores": { "mpe_scorer": { "value": 0.055 } } },
+    { "metadata": { "country": "Italy", "actual_value": 2254000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
+    { "metadata": { "country": "Canada", "actual_value": 2140000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
+    { "metadata": { "country": "Russia", "actual_value": 2021000000000 }, "scores": { "mpe_scorer": { "value": 0.120 } } },
+    { "metadata": { "country": "Mexico", "actual_value": 1788000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
+    { "metadata": { "country": "South Korea", "actual_value": 1712000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
+    { "metadata": { "country": "Australia", "actual_value": 1723000000000 }, "scores": { "mpe_scorer": { "value": 0.014 } } },
+    { "metadata": { "country": "Spain", "actual_value": 1580000000000 }, "scores": { "mpe_scorer": { "value": 0.022 } } },
+    { "metadata": { "country": "Indonesia", "actual_value": 1371000000000 }, "scores": { "mpe_scorer": { "value": 0.065 } } },
+    { "metadata": { "country": "Turkey", "actual_value": 1108000000000 }, "scores": { "mpe_scorer": { "value": 0.085 } } },
+    { "metadata": { "country": "Saudi Arabia", "actual_value": 1069000000000 }, "scores": { "mpe_scorer": { "value": 0.040 } } },
+    { "metadata": { "country": "Netherlands", "actual_value": 1118000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
+    { "metadata": { "country": "Switzerland", "actual_value": 884000000000 }, "scores": { "mpe_scorer": { "value": 0.010 } } },
+    { "metadata": { "country": "Poland", "actual_value": 811000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
+    { "metadata": { "country": "Argentina", "actual_value": 621000000000 }, "scores": { "mpe_scorer": { "value": 0.150 } } },
+    { "metadata": { "country": "Sweden", "actual_value": 593000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
+    { "metadata": { "country": "Belgium", "actual_value": 632000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
+    { "metadata": { "country": "Thailand", "actual_value": 512000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
+    { "metadata": { "country": "Iran", "actual_value": 366000000000 }, "scores": { "mpe_scorer": { "value": 0.250 } } },
+    { "metadata": { "country": "Austria", "actual_value": 516000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
+    { "metadata": { "country": "Norway", "actual_value": 485000000000 }, "scores": { "mpe_scorer": { "value": 0.011 } } },
+    { "metadata": { "country": "United Arab Emirates", "actual_value": 509000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
+    { "metadata": { "country": "Nigeria", "actual_value": 362000000000 }, "scores": { "mpe_scorer": { "value": 0.180 } } },
+    { "metadata": { "country": "Vietnam", "actual_value": 429000000000 }, "scores": { "mpe_scorer": { "value": 0.075 } } },
+    { "metadata": { "country": "Malaysia", "actual_value": 430000000000 }, "scores": { "mpe_scorer": { "value": 0.030 } } },
+    { "metadata": { "country": "South Africa", "actual_value": 377000000000 }, "scores": { "mpe_scorer": { "value": 0.060 } } },
+    { "metadata": { "country": "Philippines", "actual_value": 435000000000 }, "scores": { "mpe_scorer": { "value": 0.055 } } },
+    { "metadata": { "country": "Denmark", "actual_value": 404000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
+    { "metadata": { "country": "Egypt", "actual_value": 347000000000 }, "scores": { "mpe_scorer": { "value": 0.140 } } },
+    { "metadata": { "country": "Pakistan", "actual_value": 338000000000 }, "scores": { "mpe_scorer": { "value": 0.220 } } },
+    { "metadata": { "country": "Bangladesh", "actual_value": 446000000000 }, "scores": { "mpe_scorer": { "value": 0.080 } } },
+    { "metadata": { "country": "Colombia", "actual_value": 363000000000 }, "scores": { "mpe_scorer": { "value": 0.065 } } },
+    { "metadata": { "country": "Chile", "actual_value": 335000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
+    { "metadata": { "country": "Finland", "actual_value": 300000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
+    { "metadata": { "country": "Portugal", "actual_value": 287000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
+    { "metadata": { "country": "Czech Republic", "actual_value": 330000000000 }, "scores": { "mpe_scorer": { "value": 0.030 } } },
+    { "metadata": { "country": "Romania", "actual_value": 350000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
+    { "metadata": { "country": "New Zealand", "actual_value": 253000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
+    { "metadata": { "country": "Peru", "actual_value": 267000000000 }, "scores": { "mpe_scorer": { "value": 0.050 } } },
+    { "metadata": { "country": "Kazakhstan", "actual_value": 261000000000 }, "scores": { "mpe_scorer": { "value": 0.060 } } },
+    { "metadata": { "country": "Ukraine", "actual_value": 178000000000 }, "scores": { "mpe_scorer": { "value": 0.450 } } },
+    { "metadata": { "country": "Tuvalu", "actual_value": 62000000 }, "scores": { "mpe_scorer": { "value": 0.950 } } },
+    { "metadata": { "country": "Nauru", "actual_value": 150000000 }, "scores": { "mpe_scorer": { "value": 0.880 } } }
   ]
 }
