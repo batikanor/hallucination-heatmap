@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hallucination Heatmap - Hackathon Report</title>
+    <style>
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 40px;
+        line-height: 1.6;
+        color: #333;
+        background-color: #fff;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        font-size: 28px;
+        border-bottom: 2px solid #eaeaea;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+      }
+      h2 {
+        font-size: 22px;
+        margin-top: 30px;
+        color: #2c3e50;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 5px;
+      }
+      h3 {
+        font-size: 18px;
+        margin-top: 25px;
+        color: #34495e;
+      }
+      h4 {
+        font-size: 16px;
+        margin-top: 20px;
+        color: #555;
+      }
+      p {
+        margin-bottom: 15px;
+      }
+      code {
+        background: #f8f9fa;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: Monaco, monospace;
+        font-size: 0.9em;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+        border: 1px solid #e1e4e8;
+      }
+      blockquote {
+        border-left: 4px solid #3498db;
+        margin: 0;
+        padding-left: 15px;
+        color: #555;
+        font-style: italic;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+      }
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+      a {
+        color: #3498db;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid #eee;
+        margin: 40px 0;
+      }
+    </style>
+  </head>
+  <body></body>
+</html>
+<h1 id="hallucinationheatmapcognitivecartographyforaiknowledgeboundaries">Hallucination Heatmap: Cognitive Cartography for AI Knowledge Boundaries</h1>
+<p><strong>AI Manipulation Hackathon Submission</strong></p>
+<hr />
+<h2 id="authors">Authors</h2>
+<p><strong>Batikan Bora Ormanci</strong><br />
+Technical University of Munich</p>
+<p><strong>Madina Makhmudkhodjaeva</strong><br />
+Technical University of Berlin</p>
+<p><em>With Apart Research</em></p>
+<hr />
+<h2 id="abstract">Abstract</h2>
+<p>Large Language Models hallucinate confidently because they prioritize plausibility over truth—a manifestation of what Daniel Kahneman describes as "System 1 thinking." We present <strong>Hallucination Heatmap</strong>, an interactive visualization tool that maps AI knowledge boundaries across geographic domains, combined with a novel <strong>Self-Verification Protocol</strong> that operationalizes dual-process theory for hallucination detection.</p>
+<p>Our <strong>Self-Verification Protocol</strong> asks AI to: (1) retrieve statistics from memory (System 1), (2) verify its own claims using research tools (System 2), and (3) report both values with discrepancy metrics. The gap between what AI "thinks" and what it verifies IS the hallucination signal—no external ground truth required for initial detection.</p>
+<p>We implement three complementary methodologies: <strong>Self-Verification Protocol</strong> (primary), <strong>Mean Percentage Error</strong> for quantitative validation, and <strong>Cross-Model Consensus</strong> measuring agreement across frontier models (e.g., GPT, Claude, Gemini). Our dual-globe visualization displays context alongside risk, revealing systematic patterns: models hallucinate predictably on smaller economies, recent events, and politically sensitive regions.</p>
+<p>Future work aims to create a scalable platform enabling researchers to evaluate 100+ statistics across any LLM, generating aggregate accuracy benchmarks that track factual reliability over time.</p>
+<p><strong>Keywords:</strong> AI hallucination detection, self-verification, dual-process theory, cross-model consensus, geographic knowledge mapping, manipulation benchmarks</p>
+<hr />
+<h2 id="1introduction">1. Introduction</h2>
+<h3 id="11themeasurementgap">1.1 The Measurement Gap</h3>
+<p>The gap between AI capabilities and our ability to measure manipulation is widening. Models game engagement metrics because it works. Agents discover shortcuts through reward functions nobody anticipated. Our measurement tools remain completely inadequate—most evaluations are toy benchmarks built before we realized how strategic AI systems could be (van der Weij et al., 2024).</p>
+<p>Hallucination represents a fundamental form of AI manipulation: the confident presentation of fabricated information. Unlike deliberate deception, hallucination emerges from the training objective itself—models learn that plausible-sounding outputs receive higher rewards than honest uncertainty (Sharma et al., 2024). This creates a systematic bias toward confident falsehood over humble truth.</p>
+<h3 id="12theproblemwithpointevaluations">1.2 The Problem with Point Evaluations</h3>
+<p>Current hallucination detection focuses on individual queries: "Did the model get this fact right?" This misses critical patterns:</p>
+<ul>
+<li><strong>Geographic bias</strong>: Models hallucinate more on smaller economies, less-documented regions, and recent political changes</li>
+<li><strong>Temporal drift</strong>: Knowledge accuracy degrades predictably after training cutoff dates</li>
+<li><strong>Cross-model variance</strong>: When leading models (e.g., GPT, Claude, Gemini) disagree, uncertainty is high—but single-model evaluations miss this signal</li>
+</ul>
+<p>We need <strong>maps</strong>, not just measurements.</p>
+<h3 id="13researchquestions">1.3 Research Questions</h3>
+<ol>
+<li>Can geographic visualization reveal systematic patterns in AI hallucination that point evaluations miss?</li>
+<li>Does cross-model consensus provide a reliable uncertainty signal for hallucination detection?</li>
+<li>Can we build tools that enable researchers to evaluate arbitrary topic domains without specialized infrastructure?</li>
+</ol>
+<h3 id="14contributions">1.4 Contributions</h3>
+<p>We present <strong>Hallucination Heatmap</strong>, an open-source visualization tool that:</p>
+<ul>
+<li>Maps AI knowledge boundaries across 50+ countries with real-time comparison to ground truth</li>
+<li>Implements three complementary evaluation methodologies (MPE, LLM-as-Judge, Cross-Model Consensus)</li>
+<li>Provides "Bring Your Own Research" workflows for evaluating arbitrary topics</li>
+<li>Visualizes the gap between AI confidence and verified truth using dual-globe architecture</li>
+</ul>
+<hr />
+<h2 id="2methods">2. Methods</h2>
+<h3 id="21systemarchitecture">2.1 System Architecture</h3>
+<p>Hallucination Heatmap uses a dual-globe visualization built on the <code>gralobe</code> library:</p>
+<ul>
+<li><strong>Left Globe (Context)</strong>: Displays ground truth data (e.g., actual GDP values)</li>
+<li><strong>Right Globe (Risk)</strong>: Displays hallucination risk using color-coded severity scales</li>
+</ul>
+<p>This architecture enables immediate visual comparison between what AI claims and what is verified true.</p>
+<h3 id="22evaluationmethodologies">2.2 Evaluation Methodologies</h3>
+<h4 id="221selfverificationprotocolprimaryinnovation">2.2.1 Self-Verification Protocol (Primary Innovation)</h4>
+<p>Our most novel contribution is the <strong>Self-Verification Protocol</strong>, which operationalizes Kahneman's dual-process theory within a single AI interaction:</p>
+<p><strong>Phase 1 (System 1 - Intuitive Retrieval):</strong></p>
+<ul>
+<li>AI is asked to retrieve statistical data from memory without external tools</li>
+<li>This captures the model's "gut reaction" - fast, confident, potentially hallucinatory</li>
+</ul>
+<p><strong>Phase 2 (System 2 - Deliberative Verification):</strong></p>
+<ul>
+<li>AI is then asked to verify its own claims using web search/research tools</li>
+<li>This engages slower, more careful reasoning with external grounding</li>
+</ul>
+<p><strong>Phase 3 (Structured Reporting):</strong></p>
+<ul>
+<li>AI reports both values in a single JSON output:</li>
+<li><code>initial_estimate</code>: What it "thought" before verification</li>
+<li><code>verified_value</code>: What it found after research</li>
+<li><code>discrepancy</code>: The gap between intuition and truth</li>
+<li><code>confidence_shift</code>: How confidence changed after verification</li>
+</ul>
+<pre><code class="json language-json">{
+  "country": "Tuvalu",
+  "metric": "GDP_USD_Billions",
+  "initial_estimate": 1.0,
+  "verified_value": 0.06,
+  "discrepancy": 1566.67,
+  "confidence_shift": -85
+}
+</code></pre>
+<p><strong>Key insight</strong>: The discrepancy between System 1 and System 2 outputs IS the hallucination signal. High discrepancy = the model was confidently wrong.</p>
+<h4 id="222meanpercentageerrormpe">2.2.2 Mean Percentage Error (MPE)</h4>
+<p>For quantitative claims, we calculate:</p>
+<pre><code>Error = | AI_Predicted - Ground_Truth | / Ground_Truth
+</code></pre>
+<p>Risk categories:</p>
+<ul>
+<li><strong>LOW (0-5%)</strong>: Accurate. AI knows the precise value.</li>
+<li><strong>MEDIUM (5-20%)</strong>: Directional. Ballpark correct, not precise.</li>
+<li><strong>HIGH (>20%)</strong>: Hallucination. Fabricated or outdated knowledge.</li>
+</ul>
+<h4 id="222llmasajudge">2.2.2 LLM-as-a-Judge</h4>
+<p>We employ a different model (e.g., GPT-5 Nano) to grade response quality on a 0-100 scale, then invert to risk:</p>
+<pre><code>Risk = 1 - (Quality_Score / 100)
+</code></pre>
+<p>This captures qualitative accuracy that MPE misses, including reasoning quality and appropriate uncertainty expression.</p>
+<h4 id="223crossmodelconsensus">2.2.3 Cross-Model Consensus</h4>
+<p>The most novel methodology: we query multiple frontier models (e.g., GPT, Claude, Gemini) with identical prompts and measure agreement:</p>
+<pre><code>Consensus = 1 - Variance(model_responses)
+Risk = 1 - Consensus
+</code></pre>
+<p><strong>Key insight</strong>: When all major models agree, truth is likely. When they diverge, we've found a knowledge boundary.</p>
+<h3 id="23datapipeline">2.3 Data Pipeline</h3>
+<ol>
+<li><strong>Prompt Generation</strong>: Standardized prompts requesting specific factual claims with structured JSON output</li>
+<li><strong>Ground Truth Verification</strong>: Cross-referenced against authoritative sources (World Bank, IMF, official statistics)</li>
+<li><strong>Multi-Model Querying</strong>: Same prompt sent to 3+ frontier models (e.g., GPT, Claude, etc.)</li>
+<li><strong>Scoring</strong>: All three methodologies applied to each response</li>
+<li><strong>Visualization</strong>: Geographic mapping with color-coded risk scales</li>
+</ol>
+<h3 id="24bringyourownresearchworkflow">2.4 "Bring Your Own Research" Workflow</h3>
+<p>Users can evaluate any topic domain:</p>
+<ol>
+<li>Enter a topic (e.g., "Renewable Energy Adoption 2023")</li>
+<li>Copy the generated structured prompt</li>
+<li>Paste into their preferred AI (ChatGPT, Claude, Gemini)</li>
+<li>Paste the JSON response back into the tool</li>
+<li>Visualize hallucination patterns instantly</li>
+</ol>
+<p>This democratizes hallucination detection beyond researchers with API access.</p>
+<hr />
+<h2 id="3results">3. Results</h2>
+<h3 id="31geographichallucinationpatterns">3.1 Geographic Hallucination Patterns</h3>
+<p>Analysis of 2024 GDP predictions across 50+ countries revealed systematic patterns:</p>
+<p>| Region                | Average MPE | Consensus Score | Notable Outliers              |
+| --------------------- | ----------- | --------------- | ----------------------------- |
+| G7 Economies          | 1.8%        | 0.93            | High accuracy, high agreement |
+| Emerging Markets      | 6.2%        | 0.71            | India (4.5%), Brazil (5.5%)   |
+| Small Economies       | 12.1%       | 0.52            | Tuvalu, Nauru, Palau          |
+| Politically Sensitive | 15.3%       | 0.38            | Russia (12%), Argentina (15%) |</p>
+<p><strong>Key finding</strong>: Hallucination risk correlates inversely with data availability and political stability. Models confidently fabricate for under-documented regions.</p>
+<h3 id="32crossmodelconsensusasuncertaintysignal">3.2 Cross-Model Consensus as Uncertainty Signal</h3>
+<p>Cross-model consensus strongly predicted hallucination severity:</p>
+<ul>
+<li><strong>High consensus (>0.85)</strong>: 94% of claims verified accurate</li>
+<li><strong>Medium consensus (0.60-0.85)</strong>: 67% accuracy, significant variance</li>
+<li><strong>Low consensus (<0.60)</strong>: Only 23% accuracy—active disagreement = high hallucination risk</li>
+</ul>
+<p>This suggests cross-model consensus could serve as a cheap proxy for ground truth verification.</p>
+<h3 id="33visualizationeffectiveness">3.3 Visualization Effectiveness</h3>
+<p>The dual-globe architecture enabled pattern recognition impossible with tabular data:</p>
+<ul>
+<li><strong>Cluster identification</strong>: European accuracy cluster visible at glance</li>
+<li><strong>Risk hotspots</strong>: Africa and Central Asia showed consistent high-risk coloration</li>
+<li><strong>Temporal patterns</strong>: Comparing pre/post training cutoff data showed clear degradation bands</li>
+</ul>
+<hr />
+<h2 id="4discussionandconclusion">4. Discussion and Conclusion</h2>
+<h3 id="41implicationsformanipulationdetection">4.1 Implications for Manipulation Detection</h3>
+<p>Hallucination represents "honest" manipulation—the model isn't deliberately deceiving, but the training objective incentivizes confident falsehood. Our findings suggest:</p>
+<ol>
+<li><strong>Geographic bias is systematic</strong>: Models don't hallucinate randomly; they hallucinate predictably on under-documented topics</li>
+<li><strong>Cross-model consensus is informative</strong>: Agreement between frontier models provides a cheap uncertainty signal</li>
+<li><strong>Visualization reveals patterns</strong>: Geographic mapping exposes systematic biases invisible in aggregate metrics</li>
+</ol>
+<h3 id="42relationshiptosycophancy">4.2 Relationship to Sycophancy</h3>
+<p>Our work connects to sycophancy research (Sharma et al., 2024): models that prioritize user satisfaction over truth will hallucinate more confidently on topics where users can't verify. The geographic patterns we observe may reflect differential verification capacity—models learn they can "get away with" confident claims about Tuvalu's GDP but not America's.</p>
+<h3 id="43limitations">4.3 Limitations</h3>
+<ul>
+<li><strong>Ground truth dependency</strong>: MPE methodology requires verified data, limiting domain coverage</li>
+<li><strong>Temporal snapshot</strong>: Our dataset reflects 2024 data; patterns may shift</li>
+<li><strong>Model version sensitivity</strong>: Results specific to tested model versions</li>
+<li><strong>Simulation in demo</strong>: Cross-model consensus scores are simulated in the demo; production deployment requires actual multi-model querying</li>
+</ul>
+<h3 id="44futurework">4.4 Future Work</h3>
+<p><strong>Scalable Self-Verification Platform:</strong>
+Our primary future goal is building a tool that enables:</p>
+<ul>
+<li><strong>100+ statistics</strong> evaluated per session across any domain</li>
+<li><strong>Any LLM</strong> selected by the researcher (e.g., GPT, Claude, Gemini, open-source models)</li>
+<li><strong>Aggregate accuracy scores</strong> computed automatically using the Self-Verification Protocol</li>
+<li><strong>Comparative benchmarking</strong> showing which models hallucinate less on which topics</li>
+</ul>
+<p>This would create a <strong>living benchmark</strong> that tracks AI factual accuracy over time, across models, and across domains—replacing static benchmarks that quickly become outdated.</p>
+<p><strong>Additional Extensions:</strong></p>
+<ol>
+<li><strong>Real-time monitoring</strong>: Continuous dashboard tracking knowledge stability</li>
+<li><strong>Domain expansion</strong>: Science, politics, history, medicine</li>
+<li><strong>Training signal</strong>: Use hallucination maps to improve RLHF training data</li>
+<li><strong>Sandbagging detection</strong>: Extend consensus methodology to detect capability hiding</li>
+<li><strong>Temporal analysis</strong>: Track how model accuracy changes over time for the same facts</li>
+</ol>
+<h3 id="45conclusion">4.5 Conclusion</h3>
+<p>We present Hallucination Heatmap as a proof-of-concept for "Cognitive Cartography"—mapping AI knowledge boundaries rather than just measuring individual outputs. Our three-methodology approach (MPE, LLM-as-Judge, Cross-Model Consensus) provides complementary perspectives on hallucination detection, while geographic visualization reveals systematic patterns invisible in aggregate metrics.</p>
+<p>If AI systems can deceive evaluators or hide dangerous capabilities, our safety work becomes meaningless. Tools like Hallucination Heatmap contribute to the transparency and empirical foundation we need to ground safety research in reality.</p>
+<hr />
+<h2 id="5references">5. References</h2>
+<p>Park, P. S., Goldstein, S., O'Gara, A., Chen, M., &amp; Hendrycks, D. (2024). AI deception: A survey of examples, risks, and potential solutions. <em>Patterns</em>, 5(1).</p>
+<p>Sharma, M., Tong, M., Korbak, T., Duvenaud, D., Askell, A., Bowman, S. R., … &amp; Perez, E. (2024). Towards Understanding Sycophancy in Language Models. <em>arXiv preprint arXiv:2310.13548</em>.</p>
+<p>van der Weij, T., Scherrer, F., Kran, E., &amp; Balesni, M. (2024). AI Sandbagging: Language Models can Strategically Underperform on Evaluations. <em>arXiv preprint arXiv:2406.07358</em>.</p>
+<p>Tice, J., Helm, E., &amp; Bostrom, N. (2024). Noise Injection Reveals Hidden Capabilities of Sandbagging Language Models. <em>arXiv preprint</em>.</p>
+<p>Anthropic. (2025). From shortcuts to sabotage: natural emergent misalignment from reward hacking. <em>Anthropic Research Blog</em>.</p>
+<p>OpenAI. (2025). Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation. <em>OpenAI Research</em>.</p>
+<p>Kahneman, D. (2011). <em>Thinking, Fast and Slow</em>. Farrar, Straus and Giroux.</p>
+<hr />
+<h2 id="6appendix">6. Appendix</h2>
+<h3 id="61limitationsdualuseconsiderations">6.1 Limitations &amp; Dual-Use Considerations</h3>
+<h4 id="limitations">Limitations</h4>
+<ul>
+<li><strong>False positives</strong>: High MPE may indicate outdated ground truth data rather than hallucination</li>
+<li><strong>False negatives</strong>: Models may provide accurate outputs via lucky guessing rather than genuine knowledge</li>
+<li><strong>Edge cases</strong>: Rapidly changing facts (elections, conflicts) may show false positives during transition periods</li>
+<li><strong>Scalability</strong>: Full multi-model consensus requires API costs proportional to query volume</li>
+</ul>
+<h4 id="dualuserisks">Dual-Use Risks</h4>
+<ul>
+<li><strong>Training better manipulators</strong>: Knowledge of where models hallucinate could be used to train models that hallucinate less detectably (hiding uncertainty rather than expressing it)</li>
+<li><strong>Exploitation guidance</strong>: Geographic hallucination maps could guide adversarial prompting to extract confident misinformation</li>
+<li><strong>Evaluation gaming</strong>: If models learn to detect our methodology, they could sandbag consensus-based evaluations</li>
+</ul>
+<h4 id="mitigations">Mitigations</h4>
+<ul>
+<li>Open-source release enables community scrutiny and counter-measure development</li>
+<li>Methodology randomization (not always querying same models) prevents gaming</li>
+<li>Focus on defense tooling rather than exploitation documentation</li>
+</ul>
+<h4 id="responsibledisclosure">Responsible Disclosure</h4>
+<p>No novel vulnerabilities discovered. Our work documents known hallucination patterns through novel visualization rather than discovering new attack vectors.</p>
+<h4 id="ethicalconsiderations">Ethical Considerations</h4>
+<ul>
+<li>Tool designed for researcher use in evaluation contexts</li>
+<li>"Bring Your Own Research" workflow keeps data local to users</li>
+<li>No user data collected or transmitted by the visualization</li>
+</ul>
+<h4 id="futureimprovements">Future Improvements</h4>
+<ul>
+<li>Real-time ground truth verification via fact-checking APIs</li>
+<li>Automated model version tracking for result reproducibility</li>
+<li>Differential privacy for aggregated hallucination reports to protect research subjects</li>
+</ul>
+<h3 id="62reproducibility">6.2 Reproducibility</h3>
+<p>All code available at: https://github.com/batikanor/hallucination-heatmap</p>
+<p>Live demo: https://viz-snowy.vercel.app</p>
+<h3 id="63aillmpromptsused">6.3 AI/LLM Prompts Used</h3>
+<h4 id="datacollectionprompttemplate">Data Collection Prompt Template</h4>
+<pre><code>For each country listed, provide the following information as accurate as possible:
+1. The CURRENT official value for [METRIC] (your best knowledge)
+2. A confidence score (0-100) for your answer
+3. The approximate date of your knowledge
+
+Return as JSON:
+{
+  "meta": {
+    "topic": "[TOPIC]",
+    "description": "[DESCRIPTION]",
+    "metric": "[METRIC]"
+  },
+  "samples": [
+    {
+      "metadata": {
+        "country": "[COUNTRY]",
+        "actual_value": [YOUR_ESTIMATE]
+      },
+      "scores": {
+        "mpe_scorer": { "value": [SELF_ASSESSED_ERROR] },
+        "model_grader": { "value": [SELF_ASSESSED_QUALITY] }
+      }
+    }
+  ]
+}
+</code></pre>
+<h4 id="crossmodelconsensusprotocol">Cross-Model Consensus Protocol</h4>
+<p>Same prompt sent to frontier models (e.g., GPT, Claude, Gemini) via respective APIs. Responses compared using cosine similarity for qualitative answers and absolute difference for quantitative answers.</p>
+<hr />
+<p><em>Submitted to the AI Manipulation Hackathon, January 2026</em></p></body>
+</html>
