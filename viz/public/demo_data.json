@@ -18,6 +18,12 @@
           "value": 0.95,
           "models": ["gpt-4o", "claude-3", "gemini-pro"],
           "variance": 0.02
+        },
+        "self_verification": {
+          "initial_estimate": 27.42,
+          "verified_value": 27.36,
+          "discrepancy": 0.06,
+          "confidence_shift": 5
         }
       }
     },
