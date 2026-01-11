@@ -18,13 +18,15 @@ _With Apart Research_
 
 ## Abstract
 
-Large Language Models hallucinate confidently because they prioritize plausibility over truth—a manifestation of what Daniel Kahneman describes as "System 1 thinking." Current detection methods focus on individual outputs, missing the geographic and contextual patterns of where AI knowledge breaks down. We present **Hallucination Heatmap**, an interactive visualization tool that maps AI knowledge boundaries across geographic and topical domains, enabling researchers to identify systematic manipulation and hallucination patterns at scale.
+Large Language Models hallucinate confidently because they prioritize plausibility over truth—a manifestation of what Daniel Kahneman describes as "System 1 thinking." We present **Hallucination Heatmap**, an interactive visualization tool that maps AI knowledge boundaries across geographic domains, combined with a novel **Self-Verification Protocol** that operationalizes dual-process theory for hallucination detection.
 
-Our tool implements three complementary evaluation methodologies: (1) **Mean Percentage Error (MPE)** for quantitative factual claims, (2) **LLM-as-a-Judge** using cross-model grading, and (3) **Cross-Model Consensus** measuring agreement variance across GPT-4, Claude 3, and Gemini Pro. By visualizing the gap between AI confidence (System 1) and ground truth verification (System 2), we create a "geography of trust" that directs human attention to high-risk zones.
+Our **Self-Verification Protocol** asks AI to: (1) retrieve statistics from memory (System 1), (2) verify its own claims using research tools (System 2), and (3) report both values with discrepancy metrics. The gap between what AI "thinks" and what it verifies IS the hallucination signal—no external ground truth required for initial detection.
 
-Our dual-globe visualization displays context data alongside hallucination risk, revealing patterns invisible in single-query evaluations: models consistently hallucinate on smaller economies, recent events, and politically sensitive regions. The tool supports "Bring Your Own Research" workflows, enabling researchers to evaluate any topic domain using standardized prompts.
+We implement three complementary methodologies: **Self-Verification Protocol** (primary), **Mean Percentage Error** for quantitative validation, and **Cross-Model Consensus** measuring agreement across GPT-4, Claude, and Gemini. Our dual-globe visualization displays context alongside risk, revealing systematic patterns: models hallucinate predictably on smaller economies, recent events, and politically sensitive regions.
 
-**Keywords:** AI hallucination detection, sycophancy measurement, cross-model consensus, geographic knowledge mapping, manipulation benchmarks, evaluation validity
+Future work aims to create a scalable platform enabling researchers to evaluate 100+ statistics across any LLM, generating aggregate accuracy benchmarks that track factual reliability over time.
+
+**Keywords:** AI hallucination detection, self-verification, dual-process theory, cross-model consensus, geographic knowledge mapping, manipulation benchmarks
 
 ---
 
@@ -76,7 +78,42 @@ This architecture enables immediate visual comparison between what AI claims and
 
 ### 2.2 Evaluation Methodologies
 
-#### 2.2.1 Mean Percentage Error (MPE)
+#### 2.2.1 Self-Verification Protocol (Primary Innovation)
+
+Our most novel contribution is the **Self-Verification Protocol**, which operationalizes Kahneman's dual-process theory within a single AI interaction:
+
+**Phase 1 (System 1 - Intuitive Retrieval):**
+
+- AI is asked to retrieve statistical data from memory without external tools
+- This captures the model's "gut reaction" - fast, confident, potentially hallucinatory
+
+**Phase 2 (System 2 - Deliberative Verification):**
+
+- AI is then asked to verify its own claims using web search/research tools
+- This engages slower, more careful reasoning with external grounding
+
+**Phase 3 (Structured Reporting):**
+
+- AI reports both values in a single JSON output:
+  - `initial_estimate`: What it "thought" before verification
+  - `verified_value`: What it found after research
+  - `discrepancy`: The gap between intuition and truth
+  - `confidence_shift`: How confidence changed after verification
+
+```json
+{
+  "country": "Tuvalu",
+  "metric": "GDP_USD_Billions",
+  "initial_estimate": 1.0,
+  "verified_value": 0.06,
+  "discrepancy": 1566.67,
+  "confidence_shift": -85
+}
+```
+
+**Key insight**: The discrepancy between System 1 and System 2 outputs IS the hallucination signal. High discrepancy = the model was confidently wrong.
+
+#### 2.2.2 Mean Percentage Error (MPE)
 
 For quantitative claims, we calculate:
 
@@ -191,10 +228,23 @@ Our work connects to sycophancy research (Sharma et al., 2024): models that prio
 
 ### 4.4 Future Work
 
-1. **Real-time monitoring**: Deploy as continuous dashboard tracking knowledge stability
-2. **Domain expansion**: Extend beyond economics to science, politics, history
-3. **Training signal**: Use geographic hallucination maps to improve RLHF training data
+**Scalable Self-Verification Platform:**
+Our primary future goal is building a tool that enables:
+
+- **100+ statistics** evaluated per session across any domain
+- **Any LLM** selected by the researcher (GPT-4, Claude, Gemini, open-source models)
+- **Aggregate accuracy scores** computed automatically using the Self-Verification Protocol
+- **Comparative benchmarking** showing which models hallucinate less on which topics
+
+This would create a **living benchmark** that tracks AI factual accuracy over time, across models, and across domains—replacing static benchmarks that quickly become outdated.
+
+**Additional Extensions:**
+
+1. **Real-time monitoring**: Continuous dashboard tracking knowledge stability
+2. **Domain expansion**: Science, politics, history, medicine
+3. **Training signal**: Use hallucination maps to improve RLHF training data
 4. **Sandbagging detection**: Extend consensus methodology to detect capability hiding
+5. **Temporal analysis**: Track how model accuracy changes over time for the same facts
 
 ### 4.5 Conclusion
 
