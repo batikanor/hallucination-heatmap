@@ -10,7 +10,7 @@
 Technical University of Munich
 
 **Madina Makhmudkhodjaeva**  
-Technical University of Munich
+Technical University of Berlin
 
 _With Apart Research_
 
@@ -22,7 +22,7 @@ Large Language Models hallucinate confidently because they prioritize plausibili
 
 Our **Self-Verification Protocol** asks AI to: (1) retrieve statistics from memory (System 1), (2) verify its own claims using research tools (System 2), and (3) report both values with discrepancy metrics. The gap between what AI "thinks" and what it verifies IS the hallucination signal—no external ground truth required for initial detection.
 
-We implement three complementary methodologies: **Self-Verification Protocol** (primary), **Mean Percentage Error** for quantitative validation, and **Cross-Model Consensus** measuring agreement across GPT-4, Claude, and Gemini. Our dual-globe visualization displays context alongside risk, revealing systematic patterns: models hallucinate predictably on smaller economies, recent events, and politically sensitive regions.
+We implement three complementary methodologies: **Self-Verification Protocol** (primary), **Mean Percentage Error** for quantitative validation, and **Cross-Model Consensus** measuring agreement across frontier models (e.g., GPT, Claude, Gemini). Our dual-globe visualization displays context alongside risk, revealing systematic patterns: models hallucinate predictably on smaller economies, recent events, and politically sensitive regions.
 
 Future work aims to create a scalable platform enabling researchers to evaluate 100+ statistics across any LLM, generating aggregate accuracy benchmarks that track factual reliability over time.
 
@@ -44,7 +44,7 @@ Current hallucination detection focuses on individual queries: "Did the model ge
 
 - **Geographic bias**: Models hallucinate more on smaller economies, less-documented regions, and recent political changes
 - **Temporal drift**: Knowledge accuracy degrades predictably after training cutoff dates
-- **Cross-model variance**: When GPT-4, Claude, and Gemini disagree, uncertainty is high—but single-model evaluations miss this signal
+- **Cross-model variance**: When leading models (e.g., GPT, Claude, Gemini) disagree, uncertainty is high—but single-model evaluations miss this signal
 
 We need **maps**, not just measurements.
 
@@ -139,7 +139,7 @@ This captures qualitative accuracy that MPE misses, including reasoning quality 
 
 #### 2.2.3 Cross-Model Consensus
 
-The most novel methodology: we query multiple frontier models (GPT-4o, Claude 3, Gemini Pro) with identical prompts and measure agreement:
+The most novel methodology: we query multiple frontier models (e.g., GPT, Claude, Gemini) with identical prompts and measure agreement:
 
 ```
 Consensus = 1 - Variance(model_responses)
@@ -152,7 +152,7 @@ Risk = 1 - Consensus
 
 1. **Prompt Generation**: Standardized prompts requesting specific factual claims with structured JSON output
 2. **Ground Truth Verification**: Cross-referenced against authoritative sources (World Bank, IMF, official statistics)
-3. **Multi-Model Querying**: Same prompt sent to 3+ frontier models
+3. **Multi-Model Querying**: Same prompt sent to 3+ frontier models (e.g., GPT, Claude, etc.)
 4. **Scoring**: All three methodologies applied to each response
 5. **Visualization**: Geographic mapping with color-coded risk scales
 
@@ -232,7 +232,7 @@ Our work connects to sycophancy research (Sharma et al., 2024): models that prio
 Our primary future goal is building a tool that enables:
 
 - **100+ statistics** evaluated per session across any domain
-- **Any LLM** selected by the researcher (GPT-4, Claude, Gemini, open-source models)
+- **Any LLM** selected by the researcher (e.g., GPT, Claude, Gemini, open-source models)
 - **Aggregate accuracy scores** computed automatically using the Self-Verification Protocol
 - **Comparative benchmarking** showing which models hallucinate less on which topics
 
@@ -351,7 +351,7 @@ Return as JSON:
 
 #### Cross-Model Consensus Protocol
 
-Same prompt sent to GPT-4o, Claude 3 Opus, and Gemini Pro via respective APIs. Responses compared using cosine similarity for qualitative answers and absolute difference for quantitative answers.
+Same prompt sent to frontier models (e.g., GPT, Claude, Gemini) via respective APIs. Responses compared using cosine similarity for qualitative answers and absolute difference for quantitative answers.
 
 ---
 
