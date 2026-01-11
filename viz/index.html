@@ -289,7 +289,7 @@
         color: #e2e8f0;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         padding-bottom: 4px;
       }
       .modal-body.markdown-body p {
@@ -303,14 +303,14 @@
         margin-bottom: 0.4rem;
       }
       .math-block {
-        background: rgba(0,0,0,0.3);
+        background: rgba(0, 0, 0, 0.3);
         padding: 8px 12px;
         border-radius: 6px;
         font-family: monospace;
         font-size: 0.75rem;
         text-align: center;
         margin: 0.5rem 0;
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         color: #22d3ee;
       }
       .step-row {
@@ -463,7 +463,12 @@
             <span class="label">Info</span>
             Methodology
           </button>
-          <button id="btn-pitch" class="btn" style="border: 1px solid #a855f7; color: #a855f7;" onclick="document.getElementById('pitch-overlay').classList.add('visible')">
+          <button
+            id="btn-pitch"
+            class="btn"
+            style="border: 1px solid #a855f7; color: #a855f7"
+            onclick="document.getElementById('pitch-overlay').classList.add('visible')"
+          >
             <span class="label">Vision</span>
             The Pitch
           </button>
@@ -593,10 +598,34 @@
                   >The prompt asks the AI to find
                   <strong>Ground Truth</strong> values and compare itself.</span
                 >
-                <div style="margin-top: 8px; display: flex; gap: 8px; font-size: 0.8rem;">
-                   <a href="https://chat.openai.com" target="_blank" style="color:#38bdf8;">ChatGPT</a> • 
-                   <a href="https://claude.ai" target="_blank" style="color:#38bdf8;">Claude</a> • 
-                   <a href="https://gemini.google.com" target="_blank" style="color:#38bdf8;">Gemini</a>
+                <div
+                  style="
+                    margin-top: 8px;
+                    display: flex;
+                    gap: 8px;
+                    font-size: 0.8rem;
+                  "
+                >
+                  <a
+                    href="https://chat.openai.com"
+                    target="_blank"
+                    style="color: #38bdf8"
+                    >ChatGPT</a
+                  >
+                  •
+                  <a
+                    href="https://claude.ai"
+                    target="_blank"
+                    style="color: #38bdf8"
+                    >Claude</a
+                  >
+                  •
+                  <a
+                    href="https://gemini.google.com"
+                    target="_blank"
+                    style="color: #38bdf8"
+                    >Gemini</a
+                  >
                 </div>
               </div>
             </div>
@@ -631,26 +660,25 @@
           <p>How we measure AI accuracy vs. fabrication.</p>
         </div>
         <div class="modal-body markdown-body">
-        <div class="modal-body markdown-body">
           <p>We provide three ways to measure AI performance:</p>
-          
+
           <h3>1. Statistical Error (MPE)</h3>
           <p>Strict mathematical comparison. Best for numeric data.</p>
-          <div class="math-block">
-            Error = | Predicted - Actual | / Actual
-          </div>
-          
+          <div class="math-block">Error = | Predicted - Actual | / Actual</div>
+
           <h3>2. AI Grader (LLM-as-a-Judge)</h3>
-          <p>We ask a different model (e.g. GPT-5 Nano) to grade the response quality.</p>
-          <div class="math-block">
-             Score (0-100) → Inverted Risk
-          </div>
+          <p>
+            We ask a different model (e.g. GPT-5 Nano) to grade the response
+            quality.
+          </p>
+          <div class="math-block">Score (0-100) → Inverted Risk</div>
 
           <h3>3. Cross-Model Consensus</h3>
-          <p>Wisdom of Crowds. We query GPT-4, Claude 3, and Gemini. If they disagree, risk is high.</p>
-          <div class="math-block">
-             High Variance = High Risk
-          </div>
+          <p>
+            Wisdom of Crowds. We query GPT-4, Claude 3, and Gemini. If they
+            disagree, risk is high.
+          </p>
+          <div class="math-block">High Variance = High Risk</div>
         </div>
       </div>
     </div>
@@ -658,7 +686,13 @@
     <!-- Pitch Modal -->
     <div id="pitch-overlay" class="modal-overlay">
       <div class="modal" style="width: 700px">
-        <button class="close-btn" id="close-pitch" onclick="document.getElementById('pitch-overlay').classList.remove('visible')">×</button>
+        <button
+          class="close-btn"
+          id="close-pitch"
+          onclick="document.getElementById('pitch-overlay').classList.remove('visible')"
+        >
+          ×
+        </button>
         <div class="modal-header">
           <h2>Why This Matters</h2>
           <p>From "Thinking Fast" to Cognitive Cartography</p>
@@ -666,27 +700,53 @@
         <div class="modal-body markdown-body">
           <h3>The Problem: System 1 Thinking</h3>
           <p>
-            Nobel laureate Daniel Kahneman describes <strong>System 1</strong> as fast, intuitive, and error-prone. 
-            LLMs are the ultimate System 1 engines: they hallucinate confidently because they prioritize plausibility over truth.
+            Nobel laureate Daniel Kahneman describes
+            <strong>System 1</strong> as fast, intuitive, and error-prone. LLMs
+            are the ultimate System 1 engines: they hallucinate confidently
+            because they prioritize plausibility over truth.
           </p>
 
           <h3>The Solution: Cognitive Cartography</h3>
           <p>
-            We don't need better models; we need better maps. By visualizing the gap between 
-            <strong>AI Confidence</strong> (System 1) and <strong>Ground Truth</strong> (System 2 verification), we create a geography of trust.
+            We don't need better models; we need better maps. By visualizing the
+            gap between
+            <strong>AI Confidence</strong> (System 1) and
+            <strong>Ground Truth</strong> (System 2 verification), we create a
+            geography of trust.
           </p>
-          
-          <div style="background: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; padding: 16px; margin: 16px 0; border-radius: 4px;">
-            <strong>Future Vision:</strong> A real-time dashboard of the world's knowledge stability. 
-            <br/>
-            <em>"Is the AI consensus on Climate Policy stable today, or is it hallucinating?"</em>
+
+          <div
+            style="
+              background: rgba(168, 85, 247, 0.1);
+              border-left: 4px solid #a855f7;
+              padding: 16px;
+              margin: 16px 0;
+              border-radius: 4px;
+            "
+          >
+            <strong>Future Vision:</strong> A real-time dashboard of the world's
+            knowledge stability.
+            <br />
+            <em
+              >"Is the AI consensus on Climate Policy stable today, or is it
+              hallucinating?"</em
+            >
           </div>
 
           <h3>Why This Approach?</h3>
           <ul>
-            <li><strong>No Black Boxes:</strong> We don't fix the model; we expose its boundaries.</li>
-            <li><strong>Cross-Model Consensus:</strong> If GPT-4, Claude, and Gemini agree, truth is likely.</li>
-            <li><strong>Human-in-the-Loop:</strong> The heatmap directs human attention to where it's needed most.</li>
+            <li>
+              <strong>No Black Boxes:</strong> We don't fix the model; we expose
+              its boundaries.
+            </li>
+            <li>
+              <strong>Cross-Model Consensus:</strong> If GPT-4, Claude, and
+              Gemini agree, truth is likely.
+            </li>
+            <li>
+              <strong>Human-in-the-Loop:</strong> The heatmap directs human
+              attention to where it's needed most.
+            </li>
           </ul>
         </div>
       </div>
