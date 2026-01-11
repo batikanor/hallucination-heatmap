@@ -2,59 +2,394 @@
   "status": "success",
   "meta": {
     "topic": "2024 Global GDP Prediction",
-    "description": "GPT-4o knowledge of detailed economic statistics across 50 nations.",
+    "description": "Multi-model evaluation across GPT-4o, Claude 3, Gemini Pro.",
     "metric": "GDP (USD Billions)"
   },
   "samples": [
-    { "metadata": { "country": "United States", "actual_value": 27360000000000 }, "scores": { "mpe_scorer": { "value": 0.002 } } },
-    { "metadata": { "country": "China", "actual_value": 17790000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
-    { "metadata": { "country": "Japan", "actual_value": 4212000000000 }, "scores": { "mpe_scorer": { "value": 0.008 } } },
-    { "metadata": { "country": "Germany", "actual_value": 4456000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
-    { "metadata": { "country": "India", "actual_value": 3549000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
-    { "metadata": { "country": "United Kingdom", "actual_value": 3340000000000 }, "scores": { "mpe_scorer": { "value": 0.021 } } },
-    { "metadata": { "country": "France", "actual_value": 3030000000000 }, "scores": { "mpe_scorer": { "value": 0.019 } } },
-    { "metadata": { "country": "Brazil", "actual_value": 2173000000000 }, "scores": { "mpe_scorer": { "value": 0.055 } } },
-    { "metadata": { "country": "Italy", "actual_value": 2254000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
-    { "metadata": { "country": "Canada", "actual_value": 2140000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
-    { "metadata": { "country": "Russia", "actual_value": 2021000000000 }, "scores": { "mpe_scorer": { "value": 0.120 } } },
-    { "metadata": { "country": "Mexico", "actual_value": 1788000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
-    { "metadata": { "country": "South Korea", "actual_value": 1712000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
-    { "metadata": { "country": "Australia", "actual_value": 1723000000000 }, "scores": { "mpe_scorer": { "value": 0.014 } } },
-    { "metadata": { "country": "Spain", "actual_value": 1580000000000 }, "scores": { "mpe_scorer": { "value": 0.022 } } },
-    { "metadata": { "country": "Indonesia", "actual_value": 1371000000000 }, "scores": { "mpe_scorer": { "value": 0.065 } } },
-    { "metadata": { "country": "Turkey", "actual_value": 1108000000000 }, "scores": { "mpe_scorer": { "value": 0.085 } } },
-    { "metadata": { "country": "Saudi Arabia", "actual_value": 1069000000000 }, "scores": { "mpe_scorer": { "value": 0.040 } } },
-    { "metadata": { "country": "Netherlands", "actual_value": 1118000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
-    { "metadata": { "country": "Switzerland", "actual_value": 884000000000 }, "scores": { "mpe_scorer": { "value": 0.010 } } },
-    { "metadata": { "country": "Poland", "actual_value": 811000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
-    { "metadata": { "country": "Argentina", "actual_value": 621000000000 }, "scores": { "mpe_scorer": { "value": 0.150 } } },
-    { "metadata": { "country": "Sweden", "actual_value": 593000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
-    { "metadata": { "country": "Belgium", "actual_value": 632000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
-    { "metadata": { "country": "Thailand", "actual_value": 512000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
-    { "metadata": { "country": "Iran", "actual_value": 366000000000 }, "scores": { "mpe_scorer": { "value": 0.250 } } },
-    { "metadata": { "country": "Austria", "actual_value": 516000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
-    { "metadata": { "country": "Norway", "actual_value": 485000000000 }, "scores": { "mpe_scorer": { "value": 0.011 } } },
-    { "metadata": { "country": "United Arab Emirates", "actual_value": 509000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
-    { "metadata": { "country": "Nigeria", "actual_value": 362000000000 }, "scores": { "mpe_scorer": { "value": 0.180 } } },
-    { "metadata": { "country": "Vietnam", "actual_value": 429000000000 }, "scores": { "mpe_scorer": { "value": 0.075 } } },
-    { "metadata": { "country": "Malaysia", "actual_value": 430000000000 }, "scores": { "mpe_scorer": { "value": 0.030 } } },
-    { "metadata": { "country": "South Africa", "actual_value": 377000000000 }, "scores": { "mpe_scorer": { "value": 0.060 } } },
-    { "metadata": { "country": "Philippines", "actual_value": 435000000000 }, "scores": { "mpe_scorer": { "value": 0.055 } } },
-    { "metadata": { "country": "Denmark", "actual_value": 404000000000 }, "scores": { "mpe_scorer": { "value": 0.012 } } },
-    { "metadata": { "country": "Egypt", "actual_value": 347000000000 }, "scores": { "mpe_scorer": { "value": 0.140 } } },
-    { "metadata": { "country": "Pakistan", "actual_value": 338000000000 }, "scores": { "mpe_scorer": { "value": 0.220 } } },
-    { "metadata": { "country": "Bangladesh", "actual_value": 446000000000 }, "scores": { "mpe_scorer": { "value": 0.080 } } },
-    { "metadata": { "country": "Colombia", "actual_value": 363000000000 }, "scores": { "mpe_scorer": { "value": 0.065 } } },
-    { "metadata": { "country": "Chile", "actual_value": 335000000000 }, "scores": { "mpe_scorer": { "value": 0.035 } } },
-    { "metadata": { "country": "Finland", "actual_value": 300000000000 }, "scores": { "mpe_scorer": { "value": 0.015 } } },
-    { "metadata": { "country": "Portugal", "actual_value": 287000000000 }, "scores": { "mpe_scorer": { "value": 0.025 } } },
-    { "metadata": { "country": "Czech Republic", "actual_value": 330000000000 }, "scores": { "mpe_scorer": { "value": 0.030 } } },
-    { "metadata": { "country": "Romania", "actual_value": 350000000000 }, "scores": { "mpe_scorer": { "value": 0.045 } } },
-    { "metadata": { "country": "New Zealand", "actual_value": 253000000000 }, "scores": { "mpe_scorer": { "value": 0.018 } } },
-    { "metadata": { "country": "Peru", "actual_value": 267000000000 }, "scores": { "mpe_scorer": { "value": 0.050 } } },
-    { "metadata": { "country": "Kazakhstan", "actual_value": 261000000000 }, "scores": { "mpe_scorer": { "value": 0.060 } } },
-    { "metadata": { "country": "Ukraine", "actual_value": 178000000000 }, "scores": { "mpe_scorer": { "value": 0.450 } } },
-    { "metadata": { "country": "Tuvalu", "actual_value": 62000000 }, "scores": { "mpe_scorer": { "value": 0.950 } } },
-    { "metadata": { "country": "Nauru", "actual_value": 150000000 }, "scores": { "mpe_scorer": { "value": 0.880 } } }
+    {
+      "metadata": {
+        "country": "United States",
+        "actual_value": 27360000000000
+      },
+      "scores": {
+        "mpe_scorer": { "value": 0.002 },
+        "model_grader": { "value": 0.98 },
+        "consensus": {
+          "value": 0.95,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.02
+        }
+      }
+    },
+    {
+      "metadata": { "country": "China", "actual_value": 17790000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.015 },
+        "model_grader": { "value": 0.92 },
+        "consensus": {
+          "value": 0.88,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.08
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Japan", "actual_value": 4212000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.008 },
+        "model_grader": { "value": 0.95 },
+        "consensus": {
+          "value": 0.92,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.04
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Germany", "actual_value": 4456000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.012 },
+        "model_grader": { "value": 0.94 },
+        "consensus": {
+          "value": 0.91,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.05
+        }
+      }
+    },
+    {
+      "metadata": { "country": "India", "actual_value": 3549000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.045 },
+        "model_grader": { "value": 0.82 },
+        "consensus": {
+          "value": 0.65,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.22
+        }
+      }
+    },
+    {
+      "metadata": {
+        "country": "United Kingdom",
+        "actual_value": 3340000000000
+      },
+      "scores": {
+        "mpe_scorer": { "value": 0.021 },
+        "model_grader": { "value": 0.9 },
+        "consensus": {
+          "value": 0.89,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.06
+        }
+      }
+    },
+    {
+      "metadata": { "country": "France", "actual_value": 3030000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.019 },
+        "model_grader": { "value": 0.91 },
+        "consensus": {
+          "value": 0.9,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.05
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Brazil", "actual_value": 2173000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.055 },
+        "model_grader": { "value": 0.78 },
+        "consensus": {
+          "value": 0.55,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.3
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Italy", "actual_value": 2254000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.025 },
+        "model_grader": { "value": 0.88 },
+        "consensus": {
+          "value": 0.85,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.08
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Canada", "actual_value": 2140000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.018 },
+        "model_grader": { "value": 0.91 },
+        "consensus": {
+          "value": 0.93,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.03
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Russia", "actual_value": 2021000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.12 },
+        "model_grader": { "value": 0.55 },
+        "consensus": {
+          "value": 0.35,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.45
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Mexico", "actual_value": 1788000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.035 },
+        "model_grader": { "value": 0.85 },
+        "consensus": {
+          "value": 0.78,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.12
+        }
+      }
+    },
+    {
+      "metadata": { "country": "South Korea", "actual_value": 1712000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.015 },
+        "model_grader": { "value": 0.93 },
+        "consensus": {
+          "value": 0.94,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.03
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Australia", "actual_value": 1723000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.014 },
+        "model_grader": { "value": 0.92 },
+        "consensus": {
+          "value": 0.91,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.04
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Spain", "actual_value": 1580000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.022 },
+        "model_grader": { "value": 0.89 },
+        "consensus": {
+          "value": 0.86,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.07
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Indonesia", "actual_value": 1371000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.065 },
+        "model_grader": { "value": 0.72 },
+        "consensus": {
+          "value": 0.58,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.28
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Turkey", "actual_value": 1108000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.085 },
+        "model_grader": { "value": 0.65 },
+        "consensus": {
+          "value": 0.45,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.38
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Saudi Arabia", "actual_value": 1069000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.04 },
+        "model_grader": { "value": 0.8 },
+        "consensus": {
+          "value": 0.72,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.18
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Netherlands", "actual_value": 1118000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.015 },
+        "model_grader": { "value": 0.92 },
+        "consensus": {
+          "value": 0.93,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.03
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Switzerland", "actual_value": 884000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.01 },
+        "model_grader": { "value": 0.94 },
+        "consensus": {
+          "value": 0.96,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.02
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Poland", "actual_value": 811000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.035 },
+        "model_grader": { "value": 0.84 },
+        "consensus": {
+          "value": 0.8,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.1
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Argentina", "actual_value": 621000000000 },
+      "scores": {
+        "mpe_scorer": { "value": 0.15 },
+        "model_grader": { "value": 0.45 },
+        "consensus": {
+          "value": 0.28,
+          "models": ["gpt-4o", "claude-3", "gemini-pro"],
+          "variance": 0.55
+        }
+      }
+    },
+    {
+      "metadata": { "country": "Sweden", "actual_value": 593000000000 },
+      "scores": { "mpe_scorer": { "value": 0.012 } }
+    },
+    {
+      "metadata": { "country": "Belgium", "actual_value": 632000000000 },
+      "scores": { "mpe_scorer": { "value": 0.018 } }
+    },
+    {
+      "metadata": { "country": "Thailand", "actual_value": 512000000000 },
+      "scores": { "mpe_scorer": { "value": 0.045 } }
+    },
+    {
+      "metadata": { "country": "Iran", "actual_value": 366000000000 },
+      "scores": { "mpe_scorer": { "value": 0.25 } }
+    },
+    {
+      "metadata": { "country": "Austria", "actual_value": 516000000000 },
+      "scores": { "mpe_scorer": { "value": 0.015 } }
+    },
+    {
+      "metadata": { "country": "Norway", "actual_value": 485000000000 },
+      "scores": { "mpe_scorer": { "value": 0.011 } }
+    },
+    {
+      "metadata": {
+        "country": "United Arab Emirates",
+        "actual_value": 509000000000
+      },
+      "scores": { "mpe_scorer": { "value": 0.025 } }
+    },
+    {
+      "metadata": { "country": "Nigeria", "actual_value": 362000000000 },
+      "scores": { "mpe_scorer": { "value": 0.18 } }
+    },
+    {
+      "metadata": { "country": "Vietnam", "actual_value": 429000000000 },
+      "scores": { "mpe_scorer": { "value": 0.075 } }
+    },
+    {
+      "metadata": { "country": "Malaysia", "actual_value": 430000000000 },
+      "scores": { "mpe_scorer": { "value": 0.03 } }
+    },
+    {
+      "metadata": { "country": "South Africa", "actual_value": 377000000000 },
+      "scores": { "mpe_scorer": { "value": 0.06 } }
+    },
+    {
+      "metadata": { "country": "Philippines", "actual_value": 435000000000 },
+      "scores": { "mpe_scorer": { "value": 0.055 } }
+    },
+    {
+      "metadata": { "country": "Denmark", "actual_value": 404000000000 },
+      "scores": { "mpe_scorer": { "value": 0.012 } }
+    },
+    {
+      "metadata": { "country": "Egypt", "actual_value": 347000000000 },
+      "scores": { "mpe_scorer": { "value": 0.14 } }
+    },
+    {
+      "metadata": { "country": "Pakistan", "actual_value": 338000000000 },
+      "scores": { "mpe_scorer": { "value": 0.22 } }
+    },
+    {
+      "metadata": { "country": "Bangladesh", "actual_value": 446000000000 },
+      "scores": { "mpe_scorer": { "value": 0.08 } }
+    },
+    {
+      "metadata": { "country": "Colombia", "actual_value": 363000000000 },
+      "scores": { "mpe_scorer": { "value": 0.065 } }
+    },
+    {
+      "metadata": { "country": "Chile", "actual_value": 335000000000 },
+      "scores": { "mpe_scorer": { "value": 0.035 } }
+    },
+    {
+      "metadata": { "country": "Finland", "actual_value": 300000000000 },
+      "scores": { "mpe_scorer": { "value": 0.015 } }
+    },
+    {
+      "metadata": { "country": "Portugal", "actual_value": 287000000000 },
+      "scores": { "mpe_scorer": { "value": 0.025 } }
+    },
+    {
+      "metadata": { "country": "Czech Republic", "actual_value": 330000000000 },
+      "scores": { "mpe_scorer": { "value": 0.03 } }
+    },
+    {
+      "metadata": { "country": "Romania", "actual_value": 350000000000 },
+      "scores": { "mpe_scorer": { "value": 0.045 } }
+    },
+    {
+      "metadata": { "country": "New Zealand", "actual_value": 253000000000 },
+      "scores": { "mpe_scorer": { "value": 0.018 } }
+    },
+    {
+      "metadata": { "country": "Peru", "actual_value": 267000000000 },
+      "scores": { "mpe_scorer": { "value": 0.05 } }
+    },
+    {
+      "metadata": { "country": "Kazakhstan", "actual_value": 261000000000 },
+      "scores": { "mpe_scorer": { "value": 0.06 } }
+    },
+    {
+      "metadata": { "country": "Ukraine", "actual_value": 178000000000 },
+      "scores": { "mpe_scorer": { "value": 0.45 } }
+    },
+    {
+      "metadata": { "country": "Tuvalu", "actual_value": 62000000 },
+      "scores": { "mpe_scorer": { "value": 0.95 } }
+    },
+    {
+      "metadata": { "country": "Nauru", "actual_value": 150000000 },
+      "scores": { "mpe_scorer": { "value": 0.88 } }
+    }
   ]
 }

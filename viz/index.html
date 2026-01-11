@@ -433,6 +433,10 @@
             <span class="label">Info</span>
             Methodology
           </button>
+          <button id="btn-pitch" class="btn active" style="border: 1px solid #a855f7; color: #a855f7;">
+            <span class="label">Vision</span>
+            The Pitch
+          </button>
           <div class="divider"></div>
           <button id="btn-research" class="btn primary">BYO Research</button>
           <button id="btn-reset" class="btn danger">Reset</button>
@@ -454,6 +458,7 @@
             MPE (Math)
           </button>
           <button id="btn-mode-grader" class="toggle-btn">AI Grader</button>
+          <button id="btn-mode-consensus" class="toggle-btn">Consensus</button>
         </div>
         <!-- Legend moved to fixed position at bottom-left -->
       </div>
@@ -596,7 +601,8 @@
           <p>How we measure AI accuracy vs. fabrication.</p>
         </div>
         <div class="modal-body markdown-body">
-          <p>We provide two ways to measure AI performance:</p>
+        <div class="modal-body markdown-body">
+          <p>We provide three ways to measure AI performance:</p>
           
           <h3>1. Statistical Error (MPE)</h3>
           <p>Strict mathematical comparison. Best for numeric data.</p>
@@ -609,13 +615,48 @@
           <div class="math-block">
              Score (0-100) → Inverted Risk
           </div>
+
+          <h3>3. Cross-Model Consensus</h3>
+          <p>Wisdom of Crowds. We query GPT-4, Claude 3, and Gemini. If they disagree, risk is high.</p>
+          <div class="math-block">
+             High Variance = High Risk
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pitch Modal -->
+    <div id="pitch-overlay" class="modal-overlay">
+      <div class="modal" style="width: 700px">
+        <button class="close-btn" id="close-pitch">×</button>
+        <div class="modal-header">
+          <h2>Why This Matters</h2>
+          <p>From "Thinking Fast" to Cognitive Cartography</p>
+        </div>
+        <div class="modal-body markdown-body">
+          <h3>The Problem: System 1 Thinking</h3>
+          <p>
+            Nobel laureate Daniel Kahneman describes <strong>System 1</strong> as fast, intuitive, and error-prone. 
+            LLMs are the ultimate System 1 engines: they hallucinate confidently because they prioritize plausibility over truth.
+          </p>
+
+          <h3>The Solution: Cognitive Cartography</h3>
+          <p>
+            We don't need better models; we need better maps. By visualizing the gap between 
+            <strong>AI Confidence</strong> (System 1) and <strong>Ground Truth</strong> (System 2 verification), we create a geography of trust.
+          </p>
+          
+          <div style="background: rgba(168, 85, 247, 0.1); border-left: 4px solid #a855f7; padding: 16px; margin: 16px 0; border-radius: 4px;">
+            <strong>Future Vision:</strong> A real-time dashboard of the world's knowledge stability. 
+            <br/>
+            <em>"Is the AI consensus on Climate Policy stable today, or is it hallucinating?"</em>
+          </div>
+
+          <h3>Why This Approach?</h3>
           <ul>
-              knowledge. <br />
-              <em
-                >e.g. AI says "Tuvalu GDP is $1B" (Actual: $0.06B) →
-                <strong>1500% Error</strong></em
-              >
-            </li>
+            <li><strong>No Black Boxes:</strong> We don't fix the model; we expose its boundaries.</li>
+            <li><strong>Cross-Model Consensus:</strong> If GPT-4, Claude, and Gemini agree, truth is likely.</li>
+            <li><strong>Human-in-the-Loop:</strong> The heatmap directs human attention to where it's needed most.</li>
           </ul>
         </div>
       </div>

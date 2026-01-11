@@ -106,27 +106,28 @@ globeRight.setStatistic({
 
 // --- Global State ---
 let currentJson: InspectLog | null = null;
-let currentMode: "mpe" | "grader" = "mpe";
+let currentMode: "mpe" | "grader" | "consensus" = "mpe";
 
 // --- Toggle Logic ---
 const btnMpe = document.getElementById("btn-mode-mpe");
 const btnGrader = document.getElementById("btn-mode-grader");
+const btnConsensus = document.getElementById("btn-mode-consensus");
 
-if (btnMpe && btnGrader) {
+if (btnMpe && btnGrader && btnConsensus) {
   btnMpe.addEventListener("click", () => setMode("mpe"));
   btnGrader.addEventListener("click", () => setMode("grader"));
+  btnConsensus.addEventListener("click", () => setMode("consensus"));
 }
 
-function setMode(mode: "mpe" | "grader") {
+function setMode(mode: "mpe" | "grader" | "consensus") {
   currentMode = mode;
-  // Update UI
-  if (mode === "mpe") {
-    btnMpe?.classList.add("active");
-    btnGrader?.classList.remove("active");
-  } else {
-    btnMpe?.classList.remove("active");
-    btnGrader?.classList.add("active");
-  }
+  // Update UI - clear all, then add to active
+  btnMpe?.classList.remove("active");
+  btnGrader?.classList.remove("active");
+  btnConsensus?.classList.remove("active");
+  if (mode === "mpe") btnMpe?.classList.add("active");
+  else if (mode === "grader") btnGrader?.classList.add("active");
+  else if (mode === "consensus") btnConsensus?.classList.add("active");
   // Re-process data if exists
   if (currentJson) processJson(currentJson);
 }
@@ -155,14 +156,21 @@ function processJson(json: InspectLog) {
       if (scores.length > 0 && typeof scores[0].value === "number") {
         score = scores[0].value;
       }
-    } else {
-      // AI Grader Mode (Simulated for demo, or read from model_grader)
-      // If model_grader exists, use it. Else invert MPE as a proxy for "Accuracy Score"
+    } else if (currentMode === "grader") {
+      // AI Grader Mode
       if (sample.scores?.model_grader) {
-        score = 1 - sample.scores.model_grader.value; // Visualization expects "Risk/Error" (0=Good), Grader usually gives Quality (1=Good)
-        // So: Quality 0.95 -> Risk 0.05
+        score = 1 - sample.scores.model_grader.value;
       } else {
-        // Fallback if no grader data: just use MPE
+        const mpe = sample.scores?.mpe_scorer?.value || 0;
+        score = mpe;
+      }
+    } else if (currentMode === "consensus") {
+      // Cross-Model Consensus: Low consensus = high risk
+      if (sample.scores?.consensus) {
+        // Consensus is 0-1 (1 = all models agree). We invert for risk display.
+        score = 1 - sample.scores.consensus.value;
+      } else {
+        // Fallback: use variance if available, or MPE
         const mpe = sample.scores?.mpe_scorer?.value || 0;
         score = mpe;
       }
@@ -184,16 +192,43 @@ function processJson(json: InspectLog) {
   });
 
   // --- Right Globe Config ---
-  const isGrader = currentMode === "grader";
+  let globeConfig: {
+    id: string;
+    name: string;
+    description: string;
+    colorScale: [string, string, string];
+  };
+
+  if (currentMode === "mpe") {
+    globeConfig = {
+      id: "mpe_error",
+      name: "Statistical Error",
+      description: "Mean Percentage Error (MPE)",
+      colorScale: ["#86efac", "#fbbf24", "#f43f5e"], // Green -> Amber -> Red
+    };
+  } else if (currentMode === "grader") {
+    globeConfig = {
+      id: "grader_risk",
+      name: "AI Grade (Inverted)",
+      description: "100% - Quality Score from GPT-5 Nano",
+      colorScale: ["#86efac", "#60a5fa", "#a855f7"], // Green -> Blue -> Purple
+    };
+  } else {
+    globeConfig = {
+      id: "consensus_risk",
+      name: "Model Disagreement",
+      description: "Low consensus = high uncertainty",
+      colorScale: ["#86efac", "#22d3ee", "#f97316"], // Green -> Cyan -> Orange (Debate zones)
+    };
+  }
+
   globeRight.setStatistic({
     definition: {
-      id: isGrader ? "grader_risk" : "mpe_error",
-      name: isGrader ? "AI Grade (Inverted)" : "Visual Error Rate",
+      id: globeConfig.id,
+      name: globeConfig.name,
       unit: "%",
-      description: isGrader ? "100% - Quality Score" : "Mean Percentage Error",
-      colorScale: isGrader
-        ? ["#86efac", "#60a5fa", "#a855f7"] // Grader: Green -> Blue -> Purple (Nuance)
-        : ["#86efac", "#fbbf24", "#f43f5e"], // MPE: Green -> Amber -> Red (Error)
+      description: globeConfig.description,
+      colorScale: globeConfig.colorScale,
       domain: [0, 0.5],
       format: (v: number) => `${(v * 100).toFixed(0)}%`,
     },
@@ -702,3 +737,22 @@ document.getElementById("btn-demo")?.addEventListener("click", loadDemoData);
 document.getElementById("btn-sim")?.addEventListener("click", runSimulation);
 
 setupDragDrop();
+
+// Pitch Modal Logic
+const pitchOverlay = document.getElementById("pitch-overlay");
+const btnPitch = document.getElementById("btn-pitch");
+const closePitch = document.getElementById("close-pitch");
+
+btnPitch?.addEventListener("click", () => {
+  pitchOverlay?.classList.add("visible");
+});
+
+closePitch?.addEventListener("click", () => {
+  pitchOverlay?.classList.remove("visible");
+});
+
+pitchOverlay?.addEventListener("click", (e) => {
+  if (e.target === pitchOverlay) {
+    pitchOverlay.classList.remove("visible");
+  }
+});
