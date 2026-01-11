@@ -69,6 +69,24 @@ if (btnMethodology && methodologyOverlay && closeMethodology) {
   });
 }
 
+// --- Pitch Modal Logic ---
+const btnPitchNav = document.getElementById("btn-pitch");
+const pitchOverlayNav = document.getElementById("pitch-overlay");
+const closePitchNav = document.getElementById("close-pitch");
+
+if (btnPitchNav && pitchOverlayNav && closePitchNav) {
+  btnPitchNav.addEventListener("click", () => {
+    pitchOverlayNav.classList.add("visible");
+  });
+  closePitchNav.addEventListener("click", () => {
+    pitchOverlayNav.classList.remove("visible");
+  });
+  pitchOverlayNav.addEventListener("click", (e) => {
+    if (e.target === pitchOverlayNav)
+      pitchOverlayNav.classList.remove("visible");
+  });
+}
+
 const globeLeft = new GlobeViz(containerLeft, globeOptions);
 const globeRight = new GlobeViz(containerRight, globeOptions);
 
