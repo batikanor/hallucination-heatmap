@@ -1,0 +1,5 @@
+inspect-ai
+pandas
+python-dotenv
+openai
+anthropic
