@@ -56,36 +56,31 @@ const btnMethodology = document.getElementById("btn-methodology");
 const methodologyOverlay = document.getElementById("methodology-overlay");
 const closeMethodology = document.getElementById("close-methodology");
 
-if (btnMethodology && methodologyOverlay && closeMethodology) {
-  btnMethodology.addEventListener("click", () => {
-    methodologyOverlay.classList.add("visible");
-  });
-  closeMethodology.addEventListener("click", () => {
-    methodologyOverlay.classList.remove("visible");
-  });
-  methodologyOverlay.addEventListener("click", (e) => {
-    if (e.target === methodologyOverlay)
-      methodologyOverlay.classList.remove("visible");
-  });
-}
+btnMethodology?.addEventListener("click", () => {
+  methodologyOverlay?.classList.add("visible");
+});
+closeMethodology?.addEventListener("click", () => {
+  methodologyOverlay?.classList.remove("visible");
+});
+methodologyOverlay?.addEventListener("click", (e) => {
+  if (e.target === methodologyOverlay)
+    methodologyOverlay?.classList.remove("visible");
+});
 
-// --- Pitch Modal Logic ---
-const btnPitchNav = document.getElementById("btn-pitch");
-const pitchOverlayNav = document.getElementById("pitch-overlay");
-const closePitchNav = document.getElementById("close-pitch");
+// --- Pitch Modal Logic (exact same pattern) ---
+const btnPitch = document.getElementById("btn-pitch");
+const pitchOverlay = document.getElementById("pitch-overlay");
+const closePitch = document.getElementById("close-pitch");
 
-if (btnPitchNav && pitchOverlayNav && closePitchNav) {
-  btnPitchNav.addEventListener("click", () => {
-    pitchOverlayNav.classList.add("visible");
-  });
-  closePitchNav.addEventListener("click", () => {
-    pitchOverlayNav.classList.remove("visible");
-  });
-  pitchOverlayNav.addEventListener("click", (e) => {
-    if (e.target === pitchOverlayNav)
-      pitchOverlayNav.classList.remove("visible");
-  });
-}
+btnPitch?.addEventListener("click", () => {
+  pitchOverlay?.classList.add("visible");
+});
+closePitch?.addEventListener("click", () => {
+  pitchOverlay?.classList.remove("visible");
+});
+pitchOverlay?.addEventListener("click", (e) => {
+  if (e.target === pitchOverlay) pitchOverlay?.classList.remove("visible");
+});
 
 const globeLeft = new GlobeViz(containerLeft, globeOptions);
 const globeRight = new GlobeViz(containerRight, globeOptions);
