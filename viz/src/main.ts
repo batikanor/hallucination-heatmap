@@ -755,22 +755,3 @@ document.getElementById("btn-demo")?.addEventListener("click", loadDemoData);
 document.getElementById("btn-sim")?.addEventListener("click", runSimulation);
 
 setupDragDrop();
-
-// Pitch Modal Logic
-const pitchOverlay = document.getElementById("pitch-overlay");
-const btnPitch = document.getElementById("btn-pitch");
-const closePitch = document.getElementById("close-pitch");
-
-btnPitch?.addEventListener("click", () => {
-  pitchOverlay?.classList.add("visible");
-});
-
-closePitch?.addEventListener("click", () => {
-  pitchOverlay?.classList.remove("visible");
-});
-
-pitchOverlay?.addEventListener("click", (e) => {
-  if (e.target === pitchOverlay) {
-    pitchOverlay.classList.remove("visible");
-  }
-});
