@@ -6,8 +6,11 @@
 
 ## Authors
 
-**Batikan Orpava**  
-Independent Researcher
+**Batikan Bora Ormanci**  
+Technical University of Munich
+
+**Madina Makhmudkhodjaeva**  
+Technical University of Munich
 
 _With Apart Research_
 
